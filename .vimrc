@@ -1,0 +1,13 @@
+set number
+set cin
+syntax on
+filetype on
+set backspace=start
+set encoding=utf-8
+set termencoding=utf-8
+set ts=4
+set sw=4
+set sts=4
+set autoindent
+set expandtab
+set indentkeys=o,O

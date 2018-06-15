@@ -1,0 +1,29 @@
+# -*-  mode: conf; coding: utf-8 -*-
+startup_message off             # 起動時メッセージを表示しない
+defscrollback 10000             # スクロールバックを増やす
+altscreen on
+autodetach on                   # 切断時に自動的にデタッチ
+vbell off
+shell -$SHELL
+logtstamp on
+logtstamp after 1
+logfile flush
+escape ^Tt                      # エスケープキーを C-t に変更
+
+# 文字コード: UTF-8
+defutf8 on
+encoding utf-8 utf-8
+defencoding utf-8
+utf8 on on
+cjkwidth off
+
+# termcapinfo
+term xterm-256color             # エラーが出たら xterm にする
+termcapinfo xterm* ti@:te@      # マウスによるスクロール
+termcapinfo xterm* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm' # enable 256 color
+termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?' # don't resize terminal width when re-attached.
+termcapinfo xterm-256color hs@:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l\E[?1;4;6
+
+# 超いい感じになる黒魔術
+caption always "%{kY} %n%f* %t %?%%{kR} %u %{Rb}%:%{Yb}%?%?%F%{.b}%:%{.w}%?%="
+hardstatus alwayslastline "%{kb} $USER %{bk} %H %? %{kY} %-Lw%:%{Yk}%?%{Yk} %n%f* %t %{kY}%+Lw %-= %{bk} %m/%d/%y %C:%s %A %{kb} %l %{= .k}"

@@ -1,0 +1,5 @@
+syntax: glob
+GPATH
+GRTAGS
+GTAGS
+*~

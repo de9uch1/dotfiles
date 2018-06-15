@@ -1,0 +1,13 @@
+#!/bin/sh
+ret=1
+
+while : ; do
+    if [ ${#} -eq 0 ] ; then
+        break
+    fi
+    test -n "$(nmcli connection show --active ${1} 2>/dev/null)"
+    ret=$((${ret} * ${?}))
+    shift
+done
+
+exit ${ret}

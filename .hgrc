@@ -1,0 +1,6 @@
+[ui]
+username = Hiroyuki Deguchi <d@dlambda.org>
+ignore = ~/.hgignore
+
+[extensions]
+color =

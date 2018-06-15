@@ -1,0 +1,16 @@
+[user]
+    name = Hiroyuki Deguchi
+    email = d@dlambda.org
+
+[alias]
+    b = branch
+    ci = commit
+    co = checkout
+    df = diff
+    st = status
+
+[ghq]
+    root = /home/d/local/src
+
+[color]
+    ui = auto

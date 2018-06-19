@@ -33,7 +33,7 @@ fi
 if [ "${TERM}" != "dumb" ] ; then
 	export PS1="\[\033[01;36m\][\[\033[01;33m\]\u@\h\[\033[01;36m\]]-[\[\033[01;33m\]\$?\[\033[01;36m\]]-[\[\033[01;33m\]\w\[\033[01;36m\]]>\[\033[00m\] "
 fi
-export EMACS_SERVER_FILE=/tmp/emacs1001/server
+export EMACS_SERVER_FILE="/tmp/emacs$(id -u)/server"
 export HISTSIZE=10000000
 export HISTCONTROL=ignoredups
 stty stop undef

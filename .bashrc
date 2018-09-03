@@ -25,7 +25,9 @@ if [ -d ${HOME}/gentoo ] || [ -d ${HOME}/gentoo32 ] ; then
 fi
 
 export GOPATH="${HOME}/.go"
-add-path ${HOME}/bin ${HOME}/.gem/ruby/2.5.0/bin add-path ${HOME}/.local/bin ${GOPATH}/bin
+add-path ${HOME}/bin ${HOME}/.gem/ruby/2.5.0/bin
+add-path ${HOME}/.local/bin ${GOPATH}/bin
+add-path /usr/local/cuda/bin
 if [ $(uname -m) = "x86_64" ] ; then
     add-path ${HOME}/opt/anaconda3/bin
 fi
@@ -33,7 +35,7 @@ fi
 if [ "${TERM}" != "dumb" ] ; then
 	export PS1="\[\033[01;36m\][\[\033[01;33m\]\u@\h\[\033[01;36m\]]-[\[\033[01;33m\]\$?\[\033[01;36m\]]-[\[\033[01;33m\]\w\[\033[01;36m\]]>\[\033[00m\] "
 fi
-export EMACS_SERVER_FILE=/tmp/emacs1001/server
+export EMACS_SERVER_FILE=/tmp/emacs$(id -u)/server
 export HISTSIZE=10000000
 export HISTCONTROL=ignoredups
 stty stop undef
@@ -149,7 +151,6 @@ if [[ $DISTRIB_ID = "gentoo" ]] ;then
 	gentoo-mode
 fi
 
-
 # Gentoo Prefix
 if ! [ -z ${EPREFIX} ] && [ ${SHELL} != ${EPREFIX}/bin/bash ] && [ "${PS1}x" != "x" ] ; then
     if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
@@ -166,7 +167,7 @@ if ! [ -z ${EPREFIX} ] && [ ${SHELL} != ${EPREFIX}/bin/bash ] && [ "${PS1}x" != 
     fi
 
     echo "Entering Gentoo Prefix ${EPREFIX}"
-    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL NOFISH=$NOFISH"
+    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL NOFISH=$NOFISH PATH=$PATH"
     [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"
     [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
     [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"
@@ -178,6 +179,10 @@ fi
 ################################################################
 #### fish loader
 ################################################################
-if [ ${TERM} != "dumb" ] && [ ${NOFISH} = 0 ] && [ $(which fish) ] ; then
-    [ -x ${EPREFIX}/bin/fish ] && SHELL=${EPREFIX}/bin/fish exec ${EPREFIX}/bin/fish
+if [ ${TERM} = "dumb" ] || [ ${TERM} = "eterm-color" ] ; then
+    NOFISH=1
+fi
+
+if [ ${NOFISH} = 0 ] && [ $(which fish) ] ; then
+    [ -x ${EPREFIX}/bin/fish ] && SHELL=${EPREFIX}/bin/fish PATH=$PATH exec ${EPREFIX}/bin/fish
 fi

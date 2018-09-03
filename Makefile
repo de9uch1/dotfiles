@@ -14,6 +14,7 @@ list:
 link:
 	@echo "These dotfiles are linked."
 	@rm -rf $(HOME)/$(XDG_CONFIG)/fish
+	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 
 clean:

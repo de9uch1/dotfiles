@@ -7,7 +7,7 @@ end
 if not [ -f {$HOME}/.config/fish/functions/fisher.fish ]
     echo "==> Fisherman not found. Installing..."
     curl -Lo {$HOME}/.config/fish/functions/fisher.fish --create-dirs git.io/fisher
-    fisher update
+    fisher
 end
 
 # PATH

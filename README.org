@@ -1,0 +1,4 @@
+* Install
+#+BEGIN_SRC
+curl -sL dot.dlambda.org | sh
+#+END_SRC

@@ -1,4 +1,4 @@
-if [ $TERM = "dumb" ]
+if [ $TERM = "dumb" ] ; or [ $TERM = "eterm-color" ]
     set -x SHELL (bash)
     exec bash
 end

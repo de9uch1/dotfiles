@@ -152,7 +152,7 @@ if [[ $DISTRIB_ID = "gentoo" ]] ;then
 fi
 
 # Gentoo Prefix
-if ! [ -z ${EPREFIX} ] && [ ${SHELL} != ${EPREFIX}/bin/bash ] && [ "${PS1}x" != "x" ] ; then
+if ! [ -z ${EPREFIX} ] && [ "${NOFISH}x" != "1x" ] && [ ${SHELL} != ${EPREFIX}/bin/bash ] && [ "${PS1}x" != "x" ] ; then
     if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
             echo "You appear to be in prefix already (SHELL=$SHELL)" > /dev/stderr
             exit -1
@@ -167,7 +167,7 @@ if ! [ -z ${EPREFIX} ] && [ ${SHELL} != ${EPREFIX}/bin/bash ] && [ "${PS1}x" != 
     fi
 
     echo "Entering Gentoo Prefix ${EPREFIX}"
-    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL NOFISH=$NOFISH PATH=$PATH"
+    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL NOFISH=$NOFISH PATH=$PATH TMUX_TMPDIR=${EPREFIX}/tmp"
     [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"
     [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
     [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"

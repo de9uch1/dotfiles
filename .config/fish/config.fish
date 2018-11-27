@@ -3,6 +3,10 @@ if [ $TERM = "dumb" ] ; or [ $TERM = "eterm-color" ]
     exec bash
 end
 
+if [ -f {$HOME}/.config/fish/functions/powerline-setup.fish ]
+    powerline-setup
+end
+
 # Setup Fisherman
 if not [ -f {$HOME}/.config/fish/functions/fisher.fish ]
     echo "==> Fisherman not found. Installing..."
@@ -12,7 +16,10 @@ end
 
 # PATH
 set -gx GOPATH {$HOME}/.go
-set -l PATHs {$HOME}/bin {$HOME}/.gem/ruby/2.5.0/bin {$HOME}/.local/bin {$HOME}/opt/anaconda3/bin {$GOPATH}/bin
+if [ (uname -m) = "x86_64" ]
+    set -l PATHs {$HOME}/opt/anaconda3/bin
+end
+set PATHs {$HOME}/bin {$HOME}/.gem/ruby/2.5.0/bin {$HOME}/.local/bin {$GOPATH}/bin {$PATHs}
 for p in {$PATHs}
     if begin not contains {$p} {$PATH}; and test -e {$p}; end
         set -gx PATH {$p} {$PATH}

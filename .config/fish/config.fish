@@ -5,6 +5,7 @@ end
 
 if [ -f {$HOME}/.config/fish/functions/powerline-setup.fish ]
     powerline-setup
+    set -g theme_color_scheme solarized
 end
 
 # Setup Fisherman

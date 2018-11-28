@@ -16,6 +16,7 @@ link:
 	@mkdir -p $(HOME)/bin
 	@mkdir -p $(HOME)/$(XDG_CONFIG)
 	@rm -rf $(HOME)/$(XDG_CONFIG)/fish
+	@rm -rf $(HOME)/$(XDG_CONFIG)/powerline
 	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 

@@ -25,7 +25,7 @@ if [ -d ${HOME}/gentoo ] || [ -d ${HOME}/gentoo32 ] ; then
 fi
 
 export GOPATH="${HOME}/.go"
-add-path ${HOME}/bin ${HOME}/.gem/ruby/2.5.0/bin
+add-path ${HOME}/bin ${HOME}/.gem/ruby/2.6.0/bin
 add-path ${HOME}/.local/bin ${GOPATH}/bin
 add-path /usr/local/cuda/bin
 if [ $(uname -m) = "x86_64" ] ; then

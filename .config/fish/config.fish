@@ -20,7 +20,7 @@ set -gx GOPATH {$HOME}/.go
 if [ (uname -m) = "x86_64" ]
     set -l PATHs {$HOME}/opt/anaconda3/bin
 end
-set PATHs {$HOME}/bin {$HOME}/.gem/ruby/2.5.0/bin {$HOME}/.local/bin {$GOPATH}/bin {$PATHs}
+set PATHs {$HOME}/bin {$HOME}/.gem/ruby/2.6.0/bin {$HOME}/.local/bin {$GOPATH}/bin {$PATHs}
 for p in {$PATHs}
     if begin not contains {$p} {$PATH}; and test -e {$p}; end
         set -gx PATH {$p} {$PATH}

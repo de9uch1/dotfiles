@@ -39,3 +39,6 @@ end
 if [ "$DISTRIB_ID""x" = "gentoox" ]
     gentoo-mode
 end
+
+# Alias
+alias g "git"

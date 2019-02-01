@@ -11,3 +11,4 @@ set sts=4
 set autoindent
 set expandtab
 set indentkeys=o,O
+set termguicolors

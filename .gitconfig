@@ -8,9 +8,15 @@
     co = checkout
     df = diff
     st = status
+    p = pull
+    pu = push
+    l = log
 
 [ghq]
-    root = /home/d/local/src
+    root = ~/local/src
 
 [color]
     ui = auto
+
+[core]
+    excludesfile = ~/.gitignre_global

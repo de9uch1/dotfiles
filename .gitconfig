@@ -1,6 +1,6 @@
 [user]
     name = Hiroyuki Deguchi
-    email = d@dlambda.org
+    email = deguchi@ai.cs.ehime-u.ac.jp
 
 [alias]
     b = branch
@@ -13,10 +13,10 @@
     l = log
 
 [ghq]
-    root = ~/local/src
+	root = /home/deguchi/exp/src
 
 [color]
     ui = auto
 
 [core]
-    excludesfile = ~/.gitignre_global
+	excludesfile = ~/.gitignore_global

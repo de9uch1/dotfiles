@@ -22,6 +22,8 @@ if not [ -f $FISH_CONFIG_DIR/functions/fisher.fish ]
 end
 
 # PATH
+source $HOME/.envvars
+
 set -gx GOPATH $HOME/.go
 function add_path
     set -l maybe_path $argv[1]

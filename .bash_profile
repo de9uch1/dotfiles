@@ -11,6 +11,8 @@ function add_path() {
 }
 
 # enviroment variables
+source $HOME/.envvars
+
 export LANG=ja_JP.UTF-8
 export SERVER=1
 [[ -d $HOME/gentoo ]] && [[ $(uname -m) = x86_64 ]] && EPREFIX=$HOME/gentoo

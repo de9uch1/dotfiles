@@ -58,7 +58,7 @@ if [[ -f $HOME/exp/.profile ]]; then
 fi
 
 # interactive filtering tool
-which peco >/dev/null 2>&1 && export FILTER="peco --layout bottom-up --on-cacel error"
+which peco >/dev/null 2>&1 && export FILTER="peco --layout bottom-up --on-cancel error"
 
 # load ~/.bashrc
 if [[ -f ~/.bashrc ]] ; then

@@ -23,18 +23,9 @@ alias emacs='emacsclient -a "emacs"'
 alias e='emacsclient -a "emacs"'
 
 # functions
-function search (){
+function search() {
     w3m "http://google.com/search?q=$*"
 }
-
-# for ThinkPad
-if [[ -e /proc/acpi/ibm/fan ]]; then
-    function fanlevel() {
-        echo "level $1" | sudo tee /proc/acpi/ibm/fan
-    }
-    alias stopfan='fanlevel 0'
-	alias thermal='cat /proc/acpi/ibm/thermal | sed -e "s/ -128//g"'
-fi
 
 # ssh-agent
 function start-ssh-agent() {
@@ -47,7 +38,7 @@ function start-ssh-agent() {
     fi
     ssh-add -l >& /dev/null || ssh-add $HOME/.ssh/conf.d/vcs/id_rsa* >/dev/null 2>&1
 }
-[[ $SERVER != 1 ]] && start-ssh-agent
+start-ssh-agent
 
 # for FreeBSD
 if [[ $(uname) = FreeBSD ]]; then
@@ -59,15 +50,10 @@ fi
 function gentoo-mode(){
 	# app-portage/portage-utils
 	alias lastsync='qlop -s | tail -n1'
-	alias qtime='qlop -tHvg'
-
-	# app-portage/eix
-	diffup() {
-		sudo emerge -au1 $(eix-diff | awk '/^\[.?U\]/ {print $3}' | xargs)
-	}
+	alias qtime='qlop -tv'
 
 	# app-portage/flaggie
-	acckw() {
+	function acckw() {
 		case $1 in
 			a)
 				sudo flaggie $2 '+kw::~amd64'
@@ -82,10 +68,9 @@ function gentoo-mode(){
 				sudo flaggie $2 '?kw::~amd64'
 				;;
 			*)
-				return 1
+				return -1
 		esac
 	}
-	return 0
 }
 
 [[ $DISTRIB_ID = gentoo ]] && gentoo-mode
@@ -122,5 +107,5 @@ fi
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
     NOFISH=1
 fi
-[[ $NOFISH = 0 ]] && $(which fish >/dev/null 2>&1) && [[ -x $EPREFIX/bin/fish ]] && \
-  SHELL=$EPREFIX/bin/fish PATH=$PATH exec $EPREFIX/bin/fish
+[[ $NOFISH = 0 ]] && which fish >/dev/null 2>&1 && [[ -x $EPREFIX/bin/fish ]] && \
+    SHELL=$EPREFIX/bin/fish PATH=$PATH exec $EPREFIX/bin/fish

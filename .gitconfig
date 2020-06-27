@@ -12,11 +12,8 @@
     pu = push
     l = log
 
-[ghq]
-	root = /home/deguchi/exp/src
-
 [color]
     ui = auto
 
 [core]
-	excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore_global

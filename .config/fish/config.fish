@@ -21,9 +21,11 @@ if not [ -f $FISH_CONFIG_DIR/functions/fisher.fish ]
     fisher
 end
 
-# PATH
+# enviroment variables
 source $HOME/.envvars
+set -gx GHQ_ROOT $HOME/src
 
+# Golang
 set -gx GOPATH $HOME/.go
 function add_path
     set -l maybe_path $argv[1]
@@ -31,14 +33,22 @@ function add_path
         set -gx PATH $maybe_path $PATH
     end
 end
+add_path $GOPATH/bin
 
-if [ (uname -m) = "x86_64" ]
-    add_path $HOME/opt/anaconda3/bin
+# Python
+set -gx PYENV_ROOT $HOME/.pyenv
+add_path $PYENV_ROOT/bin
+if which pyenv >/dev/null ^/dev/null
+    pyenv init - | source
+    add_path $HOME/.poetry/bin
 end
-if which ruby ^/dev/null >/dev/null
+
+# Ruby
+if which ruby >/dev/null ^/dev/null
     add_path (ruby -e 'puts Gem.user_dir')/bin
 end
-add_path $GOPATH/bin
+
+# PATH
 add_path $HOME/.local/bin
 add_path $HOME/local/bin
 add_path $HOME/bin
@@ -63,7 +73,7 @@ alias g "git"
 add_path $HOME/src/github.com/de9uch1/mlenv/bin
 add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
 add_path $HOME/src/github.com/de9uch1/Xplorer/bin
-add_path $HOME/exp/scripts
+
 if which xp ^/dev/null > /dev/null && [ -n $FILTER ]
     function tl
         set -l name (xp -n | eval $FILTER ^/dev/null)
@@ -71,26 +81,10 @@ if which xp ^/dev/null > /dev/null && [ -n $FILTER ]
             less (xp -p logs $name)/train.log
         end
     end
-    function tg
-        set -l name (xp -n | eval $FILTER ^/dev/null)
-        if [ -n "$name" ] && [ -n "$argv" ]
-            grep $argv (xp -p logs $name)/train.log
-        end
-    end
     function tt
         set -l name (xp -n | eval $FILTER ^/dev/null)
         if [ -n "$name" ]
             tail -f (xp -p logs $name)/train.log
         end
-    end
-    function res
-        set -l name (xp -n | eval $FILTER ^/dev/null)
-        if [ -n "$name" ]
-            printf "$name "
-            eval tail -n1 (xp -p results $name)/result.txt
-        end
-    end
-    function resa
-        eval tail -n1 (xp -p results (xp -n))/result.txt
     end
 end

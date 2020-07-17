@@ -3,7 +3,7 @@
 
 function add_path() {
     while [[ $# -gt 0 ]] ; do
-        if [[ -d "$1" ]] && [[ ":${PATH}:" != *:"$1":* ]] ; then
+        if [[ ":${PATH}:" != *:"$1":* ]] ; then
             export PATH="${1}:${PATH}"
         fi
         shift
@@ -37,14 +37,14 @@ export GOPATH=$HOME/.go
 add_path $GOPATH/bin
 
 # Ruby
-if $(which ruby >/dev/null 2>&1); then
+if command -v ruby >/dev/null; then
     add_path $(ruby -e 'puts Gem.user_dir')/bin
 fi
 
 # Python
 export PYENV_ROOT=$HOME/.pyenv
 add_path $PYENV_ROOT/bin
-if which pyenv >/dev/null 2>&1; then
+if command -v pyenv >/dev/null; then
     eval "$(pyenv init -)"
     add_path $HOME/.poetry/bin
 fi
@@ -60,9 +60,11 @@ add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
 add_path $HOME/src/github.com/de9uch1/Xplorer/bin
 
 # interactive filtering tool
-which peco >/dev/null 2>&1 && export FILTER="peco --layout bottom-up --on-cancel error"
+if command -v peco >/dev/null; then
+    export FILTER="peco --layout bottom-up --on-cancel error"
+fi
 
-# load ~/.bashrc
-if [[ -f ~/.bashrc ]] ; then
-    source ~/.bashrc
+# load $HOME/.bashrc
+if [[ -f $HOME/.bashrc ]] ; then
+    source $HOME/.bashrc
 fi

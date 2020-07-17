@@ -3,7 +3,7 @@
 
 # for non-interactive shell
 if [[ $- != *i* ]]; then
-	return
+    return
 fi
 
 # aliases
@@ -36,9 +36,12 @@ function start-ssh-agent() {
         ssh-agent > $HOME/.ssh-agent
         source $HOME/.ssh-agent >/dev/null
     fi
-    ssh-add -l >& /dev/null || ssh-add $HOME/.ssh/conf.d/vcs/id_rsa* >/dev/null 2>&1
+    ssh-add $HOME/.ssh/conf.d/vcs/id_rsa* >/dev/null 2>&1
 }
-start-ssh-agent
+
+if ! ssh-add -l >& /dev/null; then
+    start-ssh-agent
+fi
 
 # for FreeBSD
 if [[ $(uname) = FreeBSD ]]; then
@@ -105,7 +108,9 @@ fi
 
 # for fish shell
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
-    NOFISH=1
+    export NOFISH=1
 fi
-[[ $NOFISH = 0 ]] && which fish >/dev/null 2>&1 && [[ -x $EPREFIX/bin/fish ]] && \
-    SHELL=$EPREFIX/bin/fish PATH=$PATH exec $EPREFIX/bin/fish
+[[ $NOFISH = 0 ]] && \
+    command -v fish >/dev/null && \
+    [[ -x $(command -v fish) ]] && \
+    SHELL=$(command -v fish) PATH=$PATH exec fish

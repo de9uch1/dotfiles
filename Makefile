@@ -20,5 +20,8 @@ link:
 	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 
+pyenv:
+	@$(HOME)/bin/pyenv-install-latest
+
 clean:
 	$(foreach f,$(DOTFILES),/bin/rm -f $(HOME)/$(f);)

@@ -30,6 +30,7 @@ if [[ -f $EPREFIX/etc/os-release ]]; then
     export DISTRIB_ID="${ID}"
 fi
 export GHQ_ROOT=$HOME/src
+export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
 
 # programming languages specific PATH
 # Golang

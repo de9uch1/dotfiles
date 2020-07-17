@@ -64,6 +64,7 @@ end
 # enviroment variables
 source $HOME/.envvars
 set -gx GHQ_ROOT $HOME/src
+set -g FZF_DEFAULT_OPTS "--height 30% --layout reverse --border --color 16"
 
 # Golang
 set -gx GOPATH $HOME/.go

@@ -29,8 +29,6 @@ if [[ -f $EPREFIX/etc/os-release ]]; then
     source $EPREFIX/etc/os-release
     export DISTRIB_ID="${ID}"
 fi
-export GHQ_ROOT=$HOME/src
-export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
 
 # programming languages specific PATH
 # Golang
@@ -59,11 +57,6 @@ add_path $HOME/local/bin
 add_path $HOME/src/github.com/de9uch1/mlenv/bin
 add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
 add_path $HOME/src/github.com/de9uch1/Xplorer/bin
-
-# interactive filtering tool
-if command -v peco >/dev/null; then
-    export FILTER="peco --layout bottom-up --on-cancel error"
-fi
 
 # load $HOME/.bashrc
 if [[ -f $HOME/.bashrc ]] ; then

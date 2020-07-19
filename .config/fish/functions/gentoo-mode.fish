@@ -1,7 +1,7 @@
 function gentoo-mode
     # app-portage/portage-utils
     alias lastsync 'qlop -s | tail -n1'
-    alias qtime 'qlop -tHvg'
+    alias qtime 'qlop -tv'
 
     # app-portage/flaggie
     function acckw

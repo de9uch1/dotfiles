@@ -22,6 +22,17 @@ alias mozc-wordregister="$EPREFIX/usr/lib/mozc/mozc_tool --mode=word_register_di
 alias emacs='emacsclient -a "emacs"'
 alias e='emacsclient -a "emacs"'
 
+# interactive filtering tool
+if ! command -v fzf >/dev/null; then
+    mkdir -p $HOME/.local
+    pushd $HOME/.local
+    curl https://raw.githubusercontent.com/junegunn/fzf/master/install | bash -s -- --bin
+    popd
+fi
+export GHQ_ROOT=$HOME/src
+export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
+export FILTER="fzf $FZF_DEFAULT_OPTS"
+
 # functions
 function search() {
     w3m "http://google.com/search?q=$*"

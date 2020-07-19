@@ -14,6 +14,8 @@ if ! [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     curl -o $FISH_CONFIG_DIR/conf.d/dracula.fish \
         "https://raw.githubusercontent.com/dracula/fish/master/conf.d/dracula.fish"
 end
+
+# Dracula Theme
 set -g theme_display_git yes
 set -g theme_display_git_dirty no
 set -g theme_display_git_untracked no
@@ -55,11 +57,14 @@ set -g theme_newline_cursor yes
 set -g theme_newline_prompt ' '
 
 # setup fisherman
-if not [ -f $FISH_CONFIG_DIR/functions/fisher.fish ]
-    echo "==> Fisherman not found. Installing..."
-    curl -Lo $FISH_CONFIG_DIR/functions/fisher.fish --create-dirs git.io/fisher
-    fisher
+if not functions -q fisher
+    echo "==> Fisher not found. Installing..."
+    curl -sLo https://git.io/fisher --create-dirs $FISH_CONFIG_DIR/functions/fisher.fish
+    fish -c fisher
 end
+
+# enhancd
+set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
 
 # enviroment variables
 source $HOME/.envvars
@@ -96,11 +101,6 @@ add_path $HOME/bin
 
 # No Greeting
 set fish_greeting
-
-# Setting peco
-function fish_user_key_bindings
-    bind \cr 'peco_select_history (commandline -b)'
-end
 
 # for Gentoo
 if [ "$DISTRIB_ID""x" = "gentoox" ]

@@ -70,6 +70,7 @@ set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
 source $HOME/.envvars
 set -gx GHQ_ROOT $HOME/src
 set -g FZF_DEFAULT_OPTS "--height 30% --layout reverse --border --color 16"
+set -U FZF_LEGACY_KEYBINDINGS 0
 
 # Golang
 set -gx GOPATH $HOME/.go

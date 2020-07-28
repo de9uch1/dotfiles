@@ -17,7 +17,7 @@ export LANG=en_US.UTF-8
 [[ -d $HOME/gentoo ]] && [[ $(uname -m) = x86_64 ]] && EPREFIX=$HOME/gentoo
 [[ -d $HOME/gentoo32 ]] && [[ $(uname -m) = i686 ]] && EPREFIX=$HOME/gentoo32
 [[ $TERM != dumb ]] && export PS1="\[\033[01;36m\][\[\033[01;33m\]\u@\h\[\033[01;36m\]]-[\[\033[01;33m\]\$?\[\033[01;36m\]]-[\[\033[01;33m\]\w\[\033[01;36m\]]>\[\033[00m\] "
-export EMACS_SERVER_FILE=/tmp/emacs$(id -u)/server
+export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
 export HISTSIZE=10000000
 export HISTCONTROL=ignoredups
 [[ $- = *i* ]] && stty stop undef

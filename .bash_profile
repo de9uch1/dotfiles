@@ -31,6 +31,10 @@ if [[ -f $EPREFIX/etc/os-release ]]; then
 fi
 
 # programming languages specific PATH
+export GHQ_ROOT=$HOME/src
+export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
+export FILTER="fzf $FZF_DEFAULT_OPTS"
+
 # Golang
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin

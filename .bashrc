@@ -29,9 +29,6 @@ if ! command -v fzf >/dev/null; then
     curl https://raw.githubusercontent.com/junegunn/fzf/master/install | bash -s -- --bin
     popd
 fi
-export GHQ_ROOT=$HOME/src
-export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
-export FILTER="fzf $FZF_DEFAULT_OPTS"
 
 # functions
 function search() {

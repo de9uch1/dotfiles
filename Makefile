@@ -17,6 +17,7 @@ link:
 	@mkdir -p $(HOME)/$(XDG_CONFIG)
 	@rm -rf $(HOME)/$(XDG_CONFIG)/fish
 	@rm -rf $(HOME)/$(XDG_CONFIG)/powerline
+	@rm -rf $(HOME)/$(XDG_CONFIG)/ptpython
 	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 

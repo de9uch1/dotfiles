@@ -1,0 +1,2 @@
+#!/bin/sh
+tic -x -o ~/.terminfo ~/.config/terminfo-24bit.src

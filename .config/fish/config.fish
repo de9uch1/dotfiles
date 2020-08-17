@@ -28,6 +28,7 @@ set -g theme_avoid_ambiguous_glyphs no
 set -g theme_powerline_fonts yes
 set -g theme_nerd_fonts no
 set -g theme_color_scheme dracula
+set -g fish_prompt_pwd_dir_length 0
 set -g theme_project_dir_length 0
 set -g theme_newline_cursor yes
 

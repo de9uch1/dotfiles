@@ -1,7 +1,11 @@
 Glances
+japanize-matplotlib
+matplotlib
 pip
 ptpython
 python-language-server[all]
+sacrebleu
+sentencepiece
 stanza
 tensorboardX
 torch

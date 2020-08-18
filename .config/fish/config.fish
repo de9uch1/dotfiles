@@ -43,11 +43,36 @@ end
 set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
 
 # enviroment variables
-source $HOME/.envvars
+if type -q bass
+    bass source $HOME/.envvars
+end
 set -gx GHQ_ROOT $HOME/src
 set -gx GHQ_SELECTOR fzf
 set -gx FZF_DEFAULT_OPTS "--height 30% --layout reverse --border --color 16"
 set -U FZF_LEGACY_KEYBINDINGS 0
+
+# my functions
+function err
+    echo "$argv"
+    return -1
+end
+
+# dotfiles
+function dots
+    set -l usage "usage: dots [u]"
+    if [ (count $argv) != 1 ]
+        err "$usage" || return -1
+    end
+    switch $argv[1]
+        case u up update upgrade pull
+            pushd ~/.dotfiles
+            git pull
+            make link
+            popd
+        case *
+            err "$usage" || return -1
+    end
+end
 
 # Golang
 set -gx GOPATH $HOME/.go
@@ -62,13 +87,13 @@ add_path $GOPATH/bin
 # Python
 set -gx PYENV_ROOT $HOME/.pyenv
 add_path $PYENV_ROOT/bin
-if which pyenv >/dev/null ^/dev/null
+if command -v pyenv >/dev/null
     pyenv init - | source
     add_path $HOME/.poetry/bin
 end
 
 # Ruby
-if which ruby >/dev/null ^/dev/null
+if command -v ruby >/dev/null
     add_path (ruby -e 'puts Gem.user_dir')/bin
 end
 
@@ -93,7 +118,7 @@ add_path $HOME/src/github.com/de9uch1/mlenv/bin
 add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
 add_path $HOME/src/github.com/de9uch1/Xplorer/bin
 
-if which xp ^/dev/null > /dev/null && [ -n $FILTER ]
+if command -v xp >/dev/null && [ -n $FILTER ]
     function tl
         set -l name (xp -n | eval $FILTER ^/dev/null)
         if [ -n "$name" ]

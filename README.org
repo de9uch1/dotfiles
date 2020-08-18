@@ -1,4 +1,4 @@
 * Install
 #+BEGIN_SRC
-curl -sL dot.de9uch1.org | sh
+curl -sL dot.de9uch1.jp | sh
 #+END_SRC

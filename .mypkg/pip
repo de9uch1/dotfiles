@@ -3,6 +3,7 @@ pip
 ptpython
 python-language-server[all]
 stanza
+tensorboardX
 torch
 torchvision
 tqdm

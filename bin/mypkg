@@ -1,0 +1,47 @@
+#!/bin/sh
+
+MYPKG_LIST_DIR=${MYPKG_LIST_DIR:-$HOME/.mypkg}
+
+function usage() {
+    cat << __EOT__ 1>&2
+Usage: $(basename $0) PMS COMMAND
+
+PMS:
+    pip
+
+COMMAND:
+    install, inst, i           install packages
+    upgrade, update, up, u     upgrade packages
+__EOT__
+
+exit 1
+}
+
+function parse_args() {
+    PMS="$1"
+    COMMAND="$2"
+}
+
+function _pip() {
+    case $COMMAND in
+        install | inst | i)
+            pip install -r $MYPKG_LIST_DIR/pip
+            ;;
+        upgrade | update | up | u)
+            pip install -U -r $MYPKG_LIST_DIR/pip
+            ;;
+        *)
+            usage
+    esac
+}
+
+function main() {
+    parse_args $*
+    if [ $# != 2 ] || [ $(type -t _$PMS)x != functionx ]; then
+        usage
+    fi
+
+    _$PMS $COMMAND
+}
+
+main $*

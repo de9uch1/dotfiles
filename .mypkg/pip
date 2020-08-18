@@ -1,0 +1,8 @@
+Glances
+pip
+ptpython
+python-language-server[all]
+stanza
+torch
+torchvision
+tqdm

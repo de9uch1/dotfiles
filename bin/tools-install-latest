@@ -1,0 +1,43 @@
+#!/bin/bash
+
+TOOLS="bat"
+
+PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
+SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
+mkdir -p $SRC_DIR
+
+function exists() {
+    [[ -e $1 ]]
+}
+
+function main() {
+    pushd $SRC_DIR >/dev/null
+    for tool in $TOOLS; do
+        if $tool; then
+            echo "'$tool' successfully installed."
+        else
+            echo "'$tool' installation failed."
+        fi
+    done
+    popd >/dev/null
+}
+
+# bat
+function bat() {
+    local repository="https://github.com/sharkdp/bat"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/bat-${version}-x86_64-unknown-linux-gnu.tar.gz"
+    local pkg_dir=$(realpath "$SRC_DIR/bat-${version}-x86_64-unknown-linux-gnu")
+
+    if exists $pkg_dir/bat; then
+        return
+    fi
+
+    curl -sL "$src_uri" | tar xz
+    ln -sf $pkg_dir/bat $PREFIX_ROOT/bin/bat
+}
+
+main

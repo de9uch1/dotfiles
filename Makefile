@@ -24,5 +24,8 @@ link:
 pyenv:
 	@$(HOME)/bin/pyenv-install-latest
 
+tools:
+	@$(HOME)/bin/tools-install-latest
+
 clean:
 	$(foreach f,$(DOTFILES),/bin/rm -f $(HOME)/$(f);)

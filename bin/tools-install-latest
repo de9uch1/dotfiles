@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOOLS="bat"
+TOOLS="bat gotop"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
@@ -13,7 +13,7 @@ function exists() {
 function main() {
     pushd $SRC_DIR >/dev/null
     for tool in $TOOLS; do
-        if $tool; then
+        if _$tool; then
             echo "'$tool' successfully installed."
         else
             echo "'$tool' installation failed."
@@ -23,7 +23,7 @@ function main() {
 }
 
 # bat
-function bat() {
+function _bat() {
     local repository="https://github.com/sharkdp/bat"
     local version=$(curl -sL "$repository/releases/latest" | \
                         grep -Eo "tag/v[0-9\.]+" | \
@@ -38,6 +38,23 @@ function bat() {
 
     curl -sL "$src_uri" | tar xz
     ln -sf $pkg_dir/bat $PREFIX_ROOT/bin/bat
+}
+
+function _gotop() {
+    local repository="https://github.com/cjbassi/gotop"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/gotop_${version}_linux_amd64.tgz"
+    local pkg_dir=$(realpath "$SRC_DIR")
+
+    if exists $pkg_dir/gotop; then
+        return
+    fi
+
+    curl -sL "$src_uri" | tar xz
+    ln -sf $pkg_dir/gotop $PREFIX_ROOT/bin/gotop
 }
 
 main

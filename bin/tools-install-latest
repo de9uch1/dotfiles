@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOOLS="bat fd fzf gotop pandoc procs ripgrep"
+TOOLS="bat fd fzf ghq gotop pandoc procs ripgrep"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
@@ -132,6 +132,37 @@ function _fzf() {
         cd $pkg_dir
     fi
     ./install --bin >/dev/null 2>&1
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _ghq() {
+    local _CPU_TYPE=$(cpu_type -a)
+    local pkg_name="ghq"
+    local repository="https://github.com/x-motemen/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local S="${pkg_name}_${OS_TYPE}_${_CPU_TYPE}"
+    local src_uri="$repository/releases/download/${version}/${S}.zip"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if [[ $OS_TYPE = "freebsd" ]]; then
+        echo "'${pkg_name}' not supports FreeBSD."
+    fi
+    if exists $pkg_bin; then
+        return
+    fi
+
+    local UNZIP=$((command -v unzip) || (command -v busybox && echo unzip));
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    wget -q "$src_uri"
+    $UNZIP $S.zip
+    rm $S.zip
+    mv $S $pkg_dir
+    cd $pkg_dir
     ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
 }
 

@@ -1,60 +1,238 @@
 #!/bin/bash
 
-TOOLS="bat gotop"
+TOOLS="bat fd fzf gotop pandoc procs ripgrep"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
 mkdir -p $SRC_DIR
 
+### core functions
 function exists() {
     [[ -e $1 ]]
 }
 
+function lower() {
+    if [[ $# -eq 0 ]]; then
+        cat -
+    else
+        echo "$*"
+    fi | tr "[:upper:]" "[:lower:]"
+}
+
+function is() {
+    if [[ $1 -eq 0 ]]; then
+        return -1
+    else
+        return
+    fi
+}
+
+function os_type() {
+    uname | lower
+}
+
+function cpu_type() {
+    local _CPU_TYPE=$(uname -m | lower)
+    if [[ $# -gt 1 ]] || ( [[ $# -eq 1 ]] && [[ $1 != "-a" ]] ); then
+        return -1
+    fi
+    local alt=0
+    if [[ $# -eq 1 ]]; then
+        if [[ $1 = "-a" ]]; then
+            local alt=1
+        else
+            return -1
+        fi
+    fi
+
+    case $_CPU_TYPE in
+        amd64 | x86_64)
+            if is $alt; then
+                echo "amd64"
+            else
+                echo "x86_64"
+            fi
+            ;;
+        *)
+            ;;
+    esac
+}
+
 function main() {
-    pushd $SRC_DIR >/dev/null
+    OS_TYPE=$(os_type)
+    CPU_TYPE=$(cpu_type)
     for tool in $TOOLS; do
+        cd $SRC_DIR
         if _$tool; then
             echo "'$tool' successfully installed."
         else
             echo "'$tool' installation failed."
         fi
     done
-    popd >/dev/null
 }
 
-# bat
+### tools
 function _bat() {
-    local repository="https://github.com/sharkdp/bat"
+    local pkg_name="bat"
+    local repository="https://github.com/sharkdp/$pkg_name"
     local version=$(curl -sL "$repository/releases/latest" | \
                         grep -Eo "tag/v[0-9\.]+" | \
                         uniq | \
                         cut -c 5-)
-    local src_uri="$repository/releases/download/${version}/bat-${version}-x86_64-unknown-linux-gnu.tar.gz"
-    local pkg_dir=$(realpath "$SRC_DIR/bat-${version}-x86_64-unknown-linux-gnu")
+    local S="${pkg_name}-${version}-${CPU_TYPE}-unknown-${OS_TYPE}-gnu"
+    local src_uri="$repository/releases/download/${version}/${S}.tar.gz"
+    local pkg_dir=$(realpath "${SRC_DIR}/${S}")
+    local pkg_bin=$pkg_dir/$pkg_name
 
-    if exists $pkg_dir/bat; then
+    if [[ $OS_TYPE != "linux" ]]; then
+        echo "'${pkg_name}' only supports linux."
+    fi
+    if exists $pkg_bin || [[ $OS_TYPE != "linux" ]]; then
         return
     fi
 
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_dir/bat $PREFIX_ROOT/bin/bat
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _fd() {
+    local pkg_name="fd"
+    local repository="https://github.com/sharkdp/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local S="${pkg_name}-${version}-${CPU_TYPE}-unknown-${OS_TYPE}-gnu"
+    local src_uri="$repository/releases/download/${version}/${S}.tar.gz"
+    local pkg_dir=$(realpath "${SRC_DIR}/${S}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if [[ $OS_TYPE != "linux" ]]; then
+        echo "'${pkg_name}' only supports linux."
+    fi
+    if exists $pkg_bin; then
+        return
+    fi
+
+    curl -sL "$src_uri" | tar xz
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _fzf() {
+    local pkg_name="fzf"
+    local repository="https://github.com/junegunn/$pkg_name"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}")
+    local pkg_bin=$pkg_dir/bin/$pkg_name
+
+    if exists $pkg_bin; then
+        cd $pkg_dir
+        git pull >/dev/null 2>&1
+    else
+        git clone $repository.git >/dev/null 2>&1
+        cd $pkg_dir
+    fi
+    ./install --bin >/dev/null 2>&1
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
 }
 
 function _gotop() {
-    local repository="https://github.com/cjbassi/gotop"
+    local _CPU_TYPE=$(cpu_type -a)
+    local pkg_name="gotop"
+    local repository="https://github.com/xxxserxxx/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/${pkg_name}_${version}_${OS_TYPE}_${_CPU_TYPE}.tgz"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if exists $pkg_bin; then
+        return
+    fi
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    mkdir -p $pkg_dir
+    cd $pkg_dir
+    curl -sL "$src_uri" | tar xz
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _pandoc() {
+    local _CPU_TYPE=$(cpu_type -a)
+    local pkg_name="pandoc"
+    local repository="https://github.com/jgm/pandoc"
     local version=$(curl -sL "$repository/releases/latest" | \
                         grep -Eo "tag/[0-9\.]+" | \
                         uniq | \
                         cut -c 5-)
-    local src_uri="$repository/releases/download/${version}/gotop_${version}_linux_amd64.tgz"
-    local pkg_dir=$(realpath "$SRC_DIR")
+    local src_uri="$repository/releases/download/${version}/pandoc-${version}-${OS_TYPE}-${_CPU_TYPE}.tar.gz"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/bin/$pkg_name
 
-    if exists $pkg_dir/gotop; then
+    if [[ $OS_TYPE != "linux" ]]; then
+        echo "'${pkg_name}' only supports linux."
+    fi
+    if exists $pkg_bin; then
+        return
+    fi
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    curl -sL "$src_uri" | tar xz
+    cd $pkg_dir
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _procs() {
+    local pkg_name="procs"
+    local repository="https://github.com/dalance/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/${pkg_name}-${version}-${CPU_TYPE}-lnx.zip"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if [[ $OS_TYPE != "linux" ]]; then
+        echo "'${pkg_name}' only supports linux."
+    fi
+    if exists $pkg_bin || [[ $OS_TYPE != "linux" ]]; then
+        return
+    fi
+
+    local UNZIP=$((command -v funzip && echo "> ${pkg_name}") || (command -v busybox && echo unzip -));
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    mkdir -p $pkg_dir
+    cd $pkg_dir
+    curl -sL "$src_uri" | eval $UNZIP
+    chmod +x "${pkg_name}"
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+}
+
+function _ripgrep() {
+    local pkg_name="ripgrep"
+    local repository="https://github.com/BurntSushi/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local S="${pkg_name}-${version}-${CPU_TYPE}-unknown-${OS_TYPE}-musl"
+    local src_uri="$repository/releases/download/${version}/${S}.tar.gz"
+    local pkg_dir=$(realpath "${SRC_DIR}/${S}")
+    local pkg_bin=$pkg_dir/rg
+
+    if [[ $OS_TYPE != "linux" ]]; then
+        echo "'${pkg_name}' only supports linux."
+    fi
+    if exists $pkg_bin || [[ $OS_TYPE != "linux" ]]; then
         return
     fi
 
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_dir/gotop $PREFIX_ROOT/bin/gotop
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/rg
 }
 
+### run this script
 main

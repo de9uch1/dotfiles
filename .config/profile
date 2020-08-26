@@ -41,9 +41,9 @@ export FILTER="fzf $FZF_DEFAULT_OPTS"
 
 ### Gentoo system
 if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]]; then
-    export EPREFIX=$HOME/gentoo
+    export EPREFIX=$(realpath $HOME/gentoo)
 elif [[ -d $HOME/gentoo32 ]] && [[ $CPU_TYPE = i686 ]]; then
-    export EPREFIX=$HOME/gentoo32
+    export EPREFIX=$(realpath $HOME/gentoo32)
 fi
 
 if [[ -f $EPREFIX/etc/os-release ]]; then

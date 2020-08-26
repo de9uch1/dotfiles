@@ -88,7 +88,7 @@ function gentoo-mode(){
 [[ $DISTRIB_ID = gentoo ]] && gentoo-mode
 
 # Gentoo Prefix
-if [[ $NOFISH != 1 ]] && [[ $SHELL != $EPREFIX/bin/bash ]] && [[ -f $EPREFIX/startprefix ]]; then
+if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]]; then
     exec $EPREFIX/startprefix
 fi
 

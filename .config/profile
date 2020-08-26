@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+function add_path() {
+    while [[ $# -gt 0 ]]; do
+        if [[ ":${PATH}:" != *:"$1":* ]]; then
+            export PATH="${1}:${PATH}"
+        fi
+        shift
+    done
+}
+
+### enviroment variables
+export LANG=en_US.UTF-8
+[[ -z $NOFISH ]] && export NOFISH=0
+export KERNEL_TYPE=$(uname)
+export CPU_TYPE=$(uname -m)
+
+### System Configurations
+#### ssh-agent
+function start-ssh-agent() {
+    if [[ -f $HOME/.ssh-agent ]]; then
+        source $HOME/.ssh-agent >/dev/null
+    fi
+    if [[ -z $SSH_AGENT_PID ]] || ! kill -0 $SSH_AGENT_PID; then
+        ssh-agent > $HOME/.ssh-agent
+        source $HOME/.ssh-agent >/dev/null
+    fi
+    ssh-add $HOME/.ssh/conf.d/vcs/id_rsa* >/dev/null 2>&1
+}
+
+if ! ssh-add -l >& /dev/null; then
+    start-ssh-agent
+fi
+
+### CLI tools 
+export GHQ_ROOT=$HOME/src
+export GHQ_SELECTOR=fzf
+export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
+export FZF_LEGACY_KEYBINDINGS=0
+export FILTER="fzf $FZF_DEFAULT_OPTS"
+
+### Gentoo system
+if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]]; then
+    export EPREFIX=$HOME/gentoo
+elif [[ -d $HOME/gentoo32 ]] && [[ $CPU_TYPE = i686 ]]; then
+    export EPREFIX=$HOME/gentoo32
+fi
+
+if [[ -f $EPREFIX/etc/os-release ]]; then
+    source $EPREFIX/etc/os-release
+    export DISTRIB_ID="${ID}"
+fi
+
+### Emacs
+export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
+
+### Programming Languages
+#### Go
+export GOPATH=$HOME/.go
+add_path $GOPATH/bin
+#### Python
+export PYENV_ROOT=$HOME/.pyenv
+add_path $PYENV_ROOT/bin
+add_path $HOME/.poetry/bin
+#### Ruby
+if command -v ruby >/dev/null; then
+    add_path $(ruby -e 'puts Gem.user_dir')/bin
+fi
+
+### Research Tools
+add_path $HOME/src/github.com/de9uch1/mlenv/bin
+add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
+add_path $HOME/src/github.com/de9uch1/Xplorer/bin
+
+# My Configurations
+add_path $HOME/bin
+add_path $HOME/.local/bin
+add_path $HOME/local/bin
+
+source $HOME/.envvars
+export LOADED_PROFILE=${BASH_SOURCE:-$0}
+
+### deprecated
+cat << _EOT_ >/dev/null
+export QT_XFT="true"
+export GDK_USE_XFT=1
+export VDPAU_DRIVER="va_gl"
+_EOT_

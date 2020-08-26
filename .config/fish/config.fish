@@ -43,15 +43,18 @@ end
 set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
 
 # enviroment variables
-if type -q bass
-    bass source $HOME/.envvars
+if [ -z "$LOADED_PROFILE" ]; and type -q bass
+    bass source $HOME/.config/profile
 end
-set -gx GHQ_ROOT $HOME/src
-set -gx GHQ_SELECTOR fzf
-set -gx FZF_DEFAULT_OPTS "--height 30% --layout reverse --border --color 16"
-set -U FZF_LEGACY_KEYBINDINGS 0
 
 # my functions
+function add_path
+    set -l maybe_path $argv[1]
+    if not contains $maybe_path $PATH
+        set -gx PATH $maybe_path $PATH
+    end
+end
+
 function err
     echo "$argv"
     return -1
@@ -74,50 +77,20 @@ function dots
     end
 end
 
-# Golang
-set -gx GOPATH $HOME/.go
-function add_path
-    set -l maybe_path $argv[1]
-    if not contains $maybe_path $PATH
-        set -gx PATH $maybe_path $PATH
-    end
+# for Gentoo
+if [ "{$DISTRIB_ID}x" = "gentoox" ]
+    gentoo-mode
 end
-add_path $GOPATH/bin
 
 # Python
-set -gx PYENV_ROOT $HOME/.pyenv
-add_path $PYENV_ROOT/bin
 if command -v pyenv >/dev/null
     pyenv init - | source
-    add_path $HOME/.poetry/bin
-end
-
-# Ruby
-if command -v ruby >/dev/null
-    add_path (ruby -e 'puts Gem.user_dir')/bin
-end
-
-# PATH
-add_path $HOME/.local/bin
-add_path $HOME/local/bin
-add_path $HOME/bin
-
-# No Greeting
-set fish_greeting
-
-# for Gentoo
-if [ "$DISTRIB_ID""x" = "gentoox" ]
-    gentoo-mode
 end
 
 # alias
 alias g "git"
 
 # for experiments
-add_path $HOME/src/github.com/de9uch1/mlenv/bin
-add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
-add_path $HOME/src/github.com/de9uch1/Xplorer/bin
-
 if command -v xp >/dev/null && [ -n $FILTER ]
     function tl
         set -l name (xp -n | eval $FILTER ^/dev/null)

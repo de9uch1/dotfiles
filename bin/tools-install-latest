@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TOOLS="bat fd fzf ghq gotop pandoc procs ripgrep"
 
@@ -21,9 +21,9 @@ function lower() {
 
 function is() {
     if [[ $1 -eq 0 ]]; then
-        return -1
+        return 1
     else
-        return
+        return 0
     fi
 }
 
@@ -34,14 +34,14 @@ function os_type() {
 function cpu_type() {
     local _CPU_TYPE=$(uname -m | lower)
     if [[ $# -gt 1 ]] || ( [[ $# -eq 1 ]] && [[ $1 != "-a" ]] ); then
-        return -1
+        return 1
     fi
     local alt=0
     if [[ $# -eq 1 ]]; then
         if [[ $1 = "-a" ]]; then
             local alt=1
         else
-            return -1
+            return 1
         fi
     fi
 
@@ -159,7 +159,7 @@ function _ghq() {
 
     rm -rf $SRC_DIR/${pkg_name}*
     wget -q "$src_uri"
-    $UNZIP $S.zip
+    $UNZIP $S.zip >/dev/null 2>&1
     rm $S.zip
     mv $S $pkg_dir
     cd $pkg_dir

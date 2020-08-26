@@ -61,7 +61,9 @@ add_path $GOPATH/bin
 #### Python
 export PYENV_ROOT=$HOME/.pyenv
 add_path $PYENV_ROOT/bin
+add_path $PYENV_ROOT/shims
 add_path $HOME/.poetry/bin
+
 #### Ruby
 if command -v ruby >/dev/null; then
     add_path $(ruby -e 'puts Gem.user_dir')/bin

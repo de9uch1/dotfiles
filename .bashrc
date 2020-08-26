@@ -31,6 +31,27 @@ function search() {
     w3m "http://google.com/search?q=$*"
 }
 
+# Python
+if command -v pyenv >/dev/null; then
+    export PYENV_SHELL=bash
+    source "$PYENV_ROOT/libexec/../completions/pyenv.bash"
+    command pyenv rehash 2>/dev/null
+    function pyenv() {
+        local command
+        command="${1:-}"
+        if [ "$#" -gt 0 ]; then
+            shift
+        fi
+
+        case "$command" in
+            rehash|shell)
+                eval "$(pyenv "sh-$command" "$@")";;
+            *)
+                command pyenv "$command" "$@";;
+        esac
+    }
+fi
+
 # for FreeBSD
 if [[ $KERNEL_TYPE = FreeBSD ]]; then
     [[ $PS1 && -f /usr/local/share/bash-completion/bash_completion ]] && \
@@ -67,35 +88,9 @@ function gentoo-mode(){
 [[ $DISTRIB_ID = gentoo ]] && gentoo-mode
 
 # Gentoo Prefix
-if [[ -f $EPREFIX/startprefix ]]; then
-    $EPREFIX/startprefix
+if [[ $NOFISH != 1 ]] && [[ $SHELL != $EPREFIX/bin/bash ]] && [[ -f $EPREFIX/startprefix ]]; then
+    exec $EPREFIX/startprefix
 fi
-# if ! [[ -z $EPREFIX ]] && [[ $NOFISH != 1 ]] && [[ $SHELL != $EPREFIX/bin/bash ]] && ! [[ -z $PS1 ]]; then
-#     SHELL=/bin/bash
-
-#     if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]]; then
-#             echo "You appear to be in prefix already (SHELL=$SHELL)" > /dev/stderr
-#             exit -1
-#     fi
-
-#     SHELL=${SHELL##*/}
-#     export SHELL=${EPREFIX}/bin/${SHELL}
-#     if [[ ! -x $SHELL ]]; then
-#             echo "Failed to find the Prefix shell, this is probably" > /dev/stderr
-#             echo "because you didn't emerge the shell ${SHELL##*/}" > /dev/stderr
-#             exit -1
-#     fi
-
-#     echo "Entering Gentoo Prefix ${EPREFIX}"
-#     RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL NOFISH=$NOFISH PATH=$PATH TMUX_TMPDIR=/tmp"
-#     [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"
-#     [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
-#     [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"
-#     # exec env -i $RETAIN $SHELL -l
-#     exec $SHELL -l
-
-#     echo "Leaving Gentoo Prefix with exit status $?"
-# fi
 
 # for fish shell
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then

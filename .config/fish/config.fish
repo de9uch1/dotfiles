@@ -35,7 +35,7 @@ set -g theme_newline_cursor yes
 # setup fisherman
 if not functions -q fisher
     echo "==> Fisher not found. Installing..."
-    curl -sLo https://git.io/fisher --create-dirs $FISH_CONFIG_DIR/functions/fisher.fish
+    curl https://git.io/fisher --create-dirs -sLo $FISH_CONFIG_DIR/functions/fisher.fish
     fish -c fisher
 end
 
@@ -43,8 +43,11 @@ end
 set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
 
 # enviroment variables
-if [ -z "$LOADED_PROFILE" ]; and type -q bass
+function reload_profile
     bass source $HOME/.config/profile
+end
+if [ -z "$LOADED_PROFILE" ]; and type -q bass
+    reload_profile
 end
 
 # my functions
@@ -78,7 +81,7 @@ function dots
 end
 
 # for Gentoo
-if [ "{$DISTRIB_ID}x" = "gentoox" ]
+if [ {$DISTRIB_ID}x = "gentoox" ]
     gentoo-mode
 end
 
@@ -101,6 +104,7 @@ end
 
 # alias
 alias g "git"
+alias gs "git status"
 
 # for experiments
 if command -v xp >/dev/null && [ -n $FILTER ]

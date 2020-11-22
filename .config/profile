@@ -17,6 +17,8 @@ export CPU_TYPE=$(uname -m)
 
 ### System Configurations
 #### ssh-agent
+VCS_KEY="$HOME/.ssh/conf.d/vcs/id_rsa"
+
 function start-ssh-agent() {
     if [[ -f $HOME/.ssh-agent ]]; then
         source $HOME/.ssh-agent >/dev/null
@@ -25,10 +27,10 @@ function start-ssh-agent() {
         ssh-agent > $HOME/.ssh-agent
         source $HOME/.ssh-agent >/dev/null
     fi
-    ssh-add $HOME/.ssh/conf.d/vcs/id_rsa* >/dev/null 2>&1
+    ssh-add $VCS_KEY >/dev/null 2>&1
 }
 
-if ! ssh-add -l >& /dev/null; then
+if ! ssh-add -l >& /dev/null && [[ -f $VCS_KEY ]]; then
     start-ssh-agent
 fi
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TOOLS="bat fd fzf ghq gotop pandoc procs ripgrep"
+TOOLS="bat fd fzf ghq gotop pandoc procs ripgrep trans"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
@@ -263,6 +263,22 @@ function _ripgrep() {
 
     curl -sL "$src_uri" | tar xz
     ln -sf $pkg_bin $PREFIX_ROOT/bin/rg
+}
+
+function _trans() {
+    local pkg_name="translate-shell"
+    local repository="https://github.com/soimort/$pkg_name"
+    local src_uri="git.io/trans"
+    local pkg_dir=$(realpath "${SRC_DIR}")
+    local pkg_bin=$pkg_dir/trans
+
+    if exists $pkg_bin || [[ $OS_TYPE != "linux" ]]; then
+        return
+    fi
+
+    curl -sLO "$src_uri"
+    chmod +x $pkg_bin
+    ln -sf $pkg_bin $PREFIX_ROOT/bin/trans
 }
 
 ### run this script

@@ -2,7 +2,7 @@
 
 MYPKG_LIST_DIR=${MYPKG_LIST_DIR:-$HOME/.mypkg}
 
-function usage() {
+usage() {
     cat << __EOT__ 1>&2
 Usage: $(basename $0) PMS COMMAND
 
@@ -17,12 +17,12 @@ __EOT__
 exit 1
 }
 
-function parse_args() {
+parse_args() {
     PMS="$1"
     COMMAND="$2"
 }
 
-function _pip() {
+_pip() {
     case $COMMAND in
         install | inst | i)
             pip install -r $MYPKG_LIST_DIR/pip
@@ -35,9 +35,9 @@ function _pip() {
     esac
 }
 
-function main() {
+main() {
     parse_args $*
-    if [ $# != 2 ] || [ $(type -t _$PMS)x != functionx ]; then
+    if [ $# != 2 ] || [ `type -t _${PMS}`x != functionx ]; then
         usage
     fi
 

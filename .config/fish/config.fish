@@ -29,18 +29,19 @@ set -g theme_powerline_fonts yes
 set -g theme_nerd_fonts no
 set -g theme_color_scheme dracula
 set -g fish_prompt_pwd_dir_length 0
-set -g theme_project_dir_length 0
+set -g theme_project_dir_length 1
 set -g theme_newline_cursor yes
 
-# setup fisherman
+# setup Fisher
 if not functions -q fisher
     echo "==> Fisher not found. Installing..."
-    curl https://git.io/fisher --create-dirs -sLo $FISH_CONFIG_DIR/functions/fisher.fish
-    fish -c fisher
+    curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+    fisher update
 end
 
 # enhancd
-set -gx ENHANCD_ROOT $HOME/.cache/fisher/github.com/b4b4r07/enhancd
+bind --erase \ef
+set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
 
 # enviroment variables
 function reload_profile
@@ -105,6 +106,11 @@ end
 # alias
 alias g "git"
 alias gs "git status"
+if command -v trash >/dev/null
+    alias rm "trash -v"
+else
+    alias rm "rm -iv"
+end
 
 # for experiments
 if command -v xp >/dev/null && [ -n $FILTER ]

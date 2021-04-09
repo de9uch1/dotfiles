@@ -7,7 +7,7 @@ SRC_URI_TARBALL="https://github.com/de9uch1/dotfiles/archive/master.tar.gz"
 
 MAKE=""
 case $(uname) in
-    Linux)
+    Linux|Darwin)
         MAKE="make"
         ;;
     FreeBSD)

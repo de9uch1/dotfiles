@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # -*- mode:shell-script; sh-indentation:4; coding:utf-8 -*-
 
 # enviroment variables
@@ -10,6 +10,6 @@ export HISTCONTROL=ignoredups
 [[ -f $HOME/.config/profile ]] && source $HOME/.config/profile
 
 # load $HOME/.bashrc
-if [[ -f $HOME/.bashrc ]] ; then
+if [[ -f $HOME/.bashrc ]]; then
     source $HOME/.bashrc
 fi

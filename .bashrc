@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # -*- mode:shell-script; sh-indentation:4; coding:utf-8 -*-
 
 # for non-interactive shell
@@ -8,6 +8,25 @@ fi
 
 if [[ $- != *i* ]]; then
     return
+fi
+
+# for Gentoo Prefix
+if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]]; then
+    exec $EPREFIX/startprefix
+fi
+
+# Avoid executing fish shell in "dumb" TERM enviroment
+if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
+    INTR_SHELL=bash
+else
+    INTR_SHELL=${INTR_SHELL:-fish}
+fi
+
+# exec fish shell
+if FISH_COMMAND=$(command -v fish) && \
+        [[ -x "$FISH_COMMAND" ]] && \
+        [[ "$INTR_SHELL" = "fish" ]]; then
+    SHELL="$FISH_COMMAND" PATH="$PATH" exec fish
 fi
 
 # aliases
@@ -58,7 +77,7 @@ if [[ $KERNEL_TYPE = FreeBSD ]]; then
         source /usr/local/share/bash-completion/bash_completion
 fi
 
-# for Gentoo
+# for Gentoo system
 function gentoo-mode(){
 	# app-portage/portage-utils
 	alias lastsync='qlop -s | tail -n1'
@@ -84,19 +103,4 @@ function gentoo-mode(){
 		esac
 	}
 }
-
 [[ $DISTRIB_ID = gentoo ]] && gentoo-mode
-
-# Gentoo Prefix
-if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]]; then
-    exec $EPREFIX/startprefix
-fi
-
-# for fish shell
-if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
-    export NOFISH=1
-fi
-[[ $NOFISH = 0 ]] && \
-    FISH_COMMAND="$(command -v fish)" && \
-    [[ -x "$FISH_COMMAND" ]] && \
-    SHELL="$FISH_COMMAND" PATH="$PATH" exec fish

@@ -12,6 +12,7 @@ function add_path() {
 ### enviroment variables
 export LANG=en_US.UTF-8
 [[ -z $NOFISH ]] && export NOFISH=0
+
 export KERNEL_TYPE=$(uname)
 export CPU_TYPE=$(uname -m)
 
@@ -44,8 +45,6 @@ export FILTER="fzf $FZF_DEFAULT_OPTS"
 ### Gentoo system
 if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]]; then
     export EPREFIX=$(realpath $HOME/gentoo)
-elif [[ -d $HOME/gentoo32 ]] && [[ $CPU_TYPE = i686 ]]; then
-    export EPREFIX=$(realpath $HOME/gentoo32)
 fi
 
 if [[ -f $EPREFIX/etc/os-release ]]; then
@@ -60,11 +59,13 @@ export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
 #### Go
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin
+
 #### Python
 export PYENV_ROOT=$HOME/.pyenv
-add_path $PYENV_ROOT/bin
-add_path $PYENV_ROOT/shims
-add_path $HOME/.poetry/bin
+add_path \
+    $PYENV_ROOT/bin \
+    $PYENV_ROOT/shims \
+    $HOME/.poetry/bin
 
 #### Ruby
 if command -v ruby >/dev/null; then
@@ -72,14 +73,16 @@ if command -v ruby >/dev/null; then
 fi
 
 ### Research Tools
-add_path $HOME/src/github.com/de9uch1/mlenv/bin
-add_path $HOME/src/github.com/de9uch1/MiniBatch/bin
-add_path $HOME/src/github.com/de9uch1/Xplorer/bin
+add_path \
+    $HOME/src/github.com/de9uch1/mlenv/bin \
+    $HOME/src/github.com/de9uch1/MiniBatch/bin \
+    $HOME/src/github.com/de9uch1/Xplorer/bin
 
 # My Configurations
-add_path $HOME/bin
-add_path $HOME/.local/bin
-add_path $HOME/local/bin
+add_path \
+    $HOME/bin \
+    $HOME/.local/bin \
+    $HOME/local/bin
 
 source $HOME/.envvars
 export LOADED_PROFILE=${BASH_SOURCE:-$0}

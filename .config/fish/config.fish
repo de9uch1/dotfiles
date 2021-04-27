@@ -9,7 +9,7 @@ set FISH_CONFIG_DIR $HOME/.config/fish
 # end
 
 # Theme
-if ! [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
+if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     mkdir -p $FISH_CONFIG_DIR/conf.d
     curl -o $FISH_CONFIG_DIR/conf.d/dracula.fish \
         "https://raw.githubusercontent.com/dracula/fish/master/conf.d/dracula.fish"
@@ -33,10 +33,11 @@ set -g theme_project_dir_length 1
 set -g theme_newline_cursor yes
 
 # setup Fisher
-if not functions -q fisher
+set FISHER_INITIALIZED "$FISH_CONFIG_DIR/.fisher"
+if not [ -f $FISHER_INITIALIZED ]
     echo "==> Fisher not found. Installing..."
-    curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-    fisher update
+    touch $FISHER_INITIALIZED
+    curl -sL https://git.io/fisher | source && fisher update
 end
 
 # enhancd
@@ -82,7 +83,7 @@ function dots
 end
 
 # for Gentoo
-if [ {$DISTRIB_ID}x = "gentoox" ]
+if [ "{$DISTRIB_ID}x" = "gentoox" ]
     gentoo-mode
 end
 
@@ -113,7 +114,7 @@ else
 end
 
 # for experiments
-if command -v xp >/dev/null && [ -n $FILTER ]
+if command -v xp >/dev/null; and [ -n $FILTER ]
     function tl
         set -l name (xp -n | eval $FILTER ^/dev/null)
         if [ -n "$name" ]

@@ -8,31 +8,22 @@ set FISH_CONFIG_DIR $HOME/.config/fish
 #     exec bash
 # end
 
-# Theme
+### Theme: Dracula
 if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     mkdir -p $FISH_CONFIG_DIR/conf.d
     curl -o $FISH_CONFIG_DIR/conf.d/dracula.fish \
         "https://raw.githubusercontent.com/dracula/fish/master/conf.d/dracula.fish"
 end
 
-# Dracula Theme
-set -g theme_display_git yes
-set -g theme_git_worktree_support no
-set -g theme_use_abbreviated_branch_name no
-set -g theme_display_user yes
-set -g theme_display_hostname yes
-set -g theme_display_date yes
-set -g theme_date_format "+%Y/%m/%d (%a) %H:%M:%S"
-set -g theme_date_timezone Asia/Tokyo
-set -g theme_avoid_ambiguous_glyphs no
-set -g theme_powerline_fonts yes
-set -g theme_nerd_fonts no
-set -g theme_color_scheme dracula
-set -g fish_prompt_pwd_dir_length 0
-set -g theme_project_dir_length 1
-set -g theme_newline_cursor yes
+### Greeting
+set fish_greeting
 
-# setup Fisher
+### Prompt: Starship
+if command -v starship >/dev/null
+    starship init fish | source
+end
+
+### Plugin Manager: Fisher
 set FISHER_INITIALIZED "$FISH_CONFIG_DIR/.fisher"
 if not [ -f $FISHER_INITIALIZED ]
     echo "==> Fisher not found. Installing..."
@@ -40,11 +31,11 @@ if not [ -f $FISHER_INITIALIZED ]
     curl -sL https://git.io/fisher | source && fisher update
 end
 
-# enhancd
+#### enhancd
 bind --erase \ef
 set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
 
-# enviroment variables
+### Enviroment Variables
 function reload_profile
     bass source $HOME/.config/profile
 end
@@ -52,7 +43,7 @@ if [ -z "$LOADED_PROFILE" ]; and type -q bass
     reload_profile
 end
 
-# my functions
+### Functions
 function add_path
     set -l maybe_path $argv[1]
     if not contains $maybe_path $PATH
@@ -65,7 +56,7 @@ function err
     return -1
 end
 
-# dotfiles
+#### dotfiles
 function dots
     set -l usage "usage: dots [u]"
     if [ (count $argv) != 1 ]
@@ -82,7 +73,7 @@ function dots
     end
 end
 
-# for Gentoo system
+### Gentoo System
 if [ "{$DISTRIB_ID}x" = "gentoox" ]
     # app-portage/portage-utils
     alias lastsync 'qlop -s | tail -n1'
@@ -107,7 +98,7 @@ if [ "{$DISTRIB_ID}x" = "gentoox" ]
     end
 end
 
-# Python
+### Python
 if command -v pyenv >/dev/null
     set -gx PYENV_SHELL fish
     source "$PYENV_ROOT/libexec/../completions/pyenv.fish"
@@ -124,7 +115,7 @@ if command -v pyenv >/dev/null
     end
 end
 
-# alias
+### Aliases
 alias g "git"
 alias gs "git status"
 if command -v trash >/dev/null
@@ -133,7 +124,7 @@ else
     alias rm "rm -iv"
 end
 
-# for experiments
+### Experiments
 if command -v xp >/dev/null; and [ -n $FILTER ]
     function tl
         set -l name (xp -n | eval $FILTER ^/dev/null)

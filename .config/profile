@@ -53,7 +53,7 @@ if [[ -f $EPREFIX/etc/os-release ]]; then
 fi
 
 ### Emacs
-export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
+# export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
 
 ### Programming Languages
 #### Go
@@ -83,6 +83,11 @@ add_path \
     $HOME/bin \
     $HOME/.local/bin \
     $HOME/local/bin
+
+### Prompt: Starship
+if ! command -v starship >/dev/null; then
+    curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
+fi
 
 source $HOME/.envvars
 export LOADED_PROFILE=${BASH_SOURCE:-$0}

@@ -1,2 +1,6 @@
+.config/fish/functions/
+.config/fish/completions/
+.config/fish/conf.d/
+.config/fish/fish_variables
 .config/fish/fishd.*
-.config/fish/functions/_*
+.config/fish/.fisher

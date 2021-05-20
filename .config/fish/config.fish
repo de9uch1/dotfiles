@@ -28,7 +28,7 @@ set FISHER_INITIALIZED "$FISH_CONFIG_DIR/.fisher"
 if not [ -f $FISHER_INITIALIZED ]
     echo "==> Fisher not found. Installing..."
     touch $FISHER_INITIALIZED
-    curl -sL https://git.io/fisher | source && fisher update
+    curl -sL https://git.io/fisher | source; and fisher update
 end
 
 #### enhancd
@@ -96,6 +96,10 @@ if [ "{$DISTRIB_ID}x" = "gentoox" ]
                 return 1
         end
     end
+end
+
+function bash-no-gentoo
+    env -i NO_GENTOO=1 HOME=$HOME bash
 end
 
 ### Python

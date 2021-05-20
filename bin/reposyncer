@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+REPOSYNCER_CONFIG_DIR="${REPOSYNCER_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/reposyncer}"
+REPOSYNCER_EXCLUDES="${REPOSYNCER_EXCLUDES:-$REPOSYNCER_CONFIG_DIR/excludes}"
+
+function usage() {
+    cat << _EOT_ >&2
+usage: $(basename $0) [-n] <pull|push> HOST FILE
+_EOT_
+}
+
+function stderr() {
+    echo "$*" >&2
+}
+
+function raise() {
+    if [[ $# -gt 0 ]]; then
+        stderr "$*"
+    fi
+    exit 1
+}
+
+function chkcmd() {
+    if ! command -v $1 >/dev/null; then
+        raise "$1 is not installed, abort."
+    fi
+}
+
+function parse_args() {
+    argc=0
+    argv=()
+    excludes=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -*)
+                if [[ "$1" =~ "n" ]]; then
+                    dry_run="-n"
+                    shift
+                elif [[ "$1" =~ "x" ]]; then
+                    excludes=("${excludes[@]}" "--exclude=$2")
+                    shift 2
+                fi
+                ;;
+            *)
+                ((++argc))
+                argv=("${argv[@]}" "$1")
+                shift
+                ;;
+        esac
+    done
+
+    if [[ $argc -ne 3 ]]; then
+        usage
+        raise
+    fi
+}
+
+function main() {
+    chkcmd rsync
+    chkcmd realpath
+
+    parse_args "$@"
+
+    local mode="${argv[0]}"
+    local host="${argv[1]}"
+    local file="$(realpath ${argv[2]})"
+
+    if ! [[ -e "$file" ]]; then
+        raise "$file not found."
+    fi
+
+    path_from_home="${file##$(realpath $HOME)/}"
+
+    if [[ $mode = "pull" ]]; then
+        local src="$host:$path_from_home/"
+        local dst="$HOME/$path_from_home"
+    elif [[ $mode = "push" ]]; then
+        local src="$HOME/$path_from_home/"
+        local dst="$host:$path_from_home"
+    else
+        usage
+        raise
+    fi
+
+    if [[ -f $REPOSYNCER_EXCLUDES ]]; then
+        excludes_file="$REPOSYNCER_EXCLUDES"
+    fi
+
+    rsync \
+        -achuvzP --delete $dry_run \
+        --exclude-from="$excludes_file" "${excludes[@]}" \
+        "$src" "$dst"
+}
+
+main "$@"

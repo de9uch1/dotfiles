@@ -11,7 +11,7 @@ if [[ $- != *i* ]]; then
 fi
 
 # for Gentoo Prefix
-if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]]; then
+if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]] && [[ -z $NO_GENTOO ]]; then
     exec $EPREFIX/startprefix
 fi
 

@@ -43,7 +43,7 @@ export FZF_LEGACY_KEYBINDINGS=0
 export FILTER="fzf $FZF_DEFAULT_OPTS"
 
 ### Gentoo system
-if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]]; then
+if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]] && [[ -z $NO_GENTOO ]]; then
     export EPREFIX=$(realpath $HOME/gentoo)
 fi
 
@@ -60,23 +60,27 @@ fi
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin
 
-#### Python
-export PYENV_ROOT=$HOME/.pyenv
-add_path \
-    $PYENV_ROOT/bin \
-    $PYENV_ROOT/shims \
-    $HOME/.poetry/bin
+#### Rust
+CARGO_HOME=$HOME/.cargo
+if ! [[ -d $CARGO_HOME ]]; then
+    read -p "==> Do you install Rust? [y/N] " install_rust
+    if [[ "$install_rust" = "y" ]]; then
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    fi
+    add_path $CARGO_HOME
+fi
 
 #### Ruby
 if command -v ruby >/dev/null; then
     add_path $(ruby -e 'puts Gem.user_dir')/bin
 fi
 
-### Research Tools
+#### Python
+export PYENV_ROOT=$HOME/.pyenv
 add_path \
-    $HOME/src/github.com/de9uch1/mlenv/bin \
-    $HOME/src/github.com/de9uch1/MiniBatch/bin \
-    $HOME/src/github.com/de9uch1/Xplorer/bin
+    $PYENV_ROOT/bin \
+    $PYENV_ROOT/shims \
+    $HOME/.poetry/bin \
 
 # My Configurations
 add_path \
@@ -91,10 +95,3 @@ fi
 
 source $HOME/.envvars
 export LOADED_PROFILE=${BASH_SOURCE:-$0}
-
-### deprecated
-cat << _EOT_ >/dev/null
-export QT_XFT="true"
-export GDK_USE_XFT=1
-export VDPAU_DRIVER="va_gl"
-_EOT_

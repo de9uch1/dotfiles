@@ -33,7 +33,7 @@ end
 
 #### enhancd
 bind --erase \ef
-set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
+# set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
 
 ### Enviroment Variables
 function reload_profile
@@ -118,24 +118,9 @@ end
 ### Aliases
 alias g "git"
 alias gs "git status"
+## pip install trasn-cli
 if command -v trash >/dev/null
     alias rm "trash -v"
 else
     alias rm "rm -iv"
-end
-
-### Experiments
-if command -v xp >/dev/null; and [ -n $FILTER ]
-    function tl
-        set -l name (xp -n | eval $FILTER ^/dev/null)
-        if [ -n "$name" ]
-            less (xp -p logs $name)/train.log
-        end
-    end
-    function tt
-        set -l name (xp -n | eval $FILTER ^/dev/null)
-        if [ -n "$name" ]
-            tail -f (xp -p logs $name)/train.log
-        end
-    end
 end

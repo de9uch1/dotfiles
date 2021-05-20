@@ -4,7 +4,8 @@ TOOLS="bat fd fzf ghq gotop pandoc procs ripgrep trans"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
-mkdir -p $SRC_DIR
+BIN_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/bin})
+mkdir -p $SRC_DIR/ $BIN_DIR/
 
 ### core functions
 function exists() {
@@ -92,7 +93,7 @@ function _bat() {
     fi
 
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _fd() {
@@ -115,7 +116,7 @@ function _fd() {
     fi
 
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _fzf() {
@@ -132,7 +133,7 @@ function _fzf() {
         cd $pkg_dir
     fi
     ./install --bin >/dev/null 2>&1
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _ghq() {
@@ -163,7 +164,7 @@ function _ghq() {
     rm $S.zip
     mv $S $pkg_dir
     cd $pkg_dir
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _gotop() {
@@ -186,7 +187,7 @@ function _gotop() {
     mkdir -p $pkg_dir
     cd $pkg_dir
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _pandoc() {
@@ -211,7 +212,7 @@ function _pandoc() {
     rm -rf $SRC_DIR/${pkg_name}*
     curl -sL "$src_uri" | tar xz
     cd $pkg_dir
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _procs() {
@@ -239,7 +240,7 @@ function _procs() {
     cd $pkg_dir
     curl -sL "$src_uri" | eval $UNZIP
     chmod +x "${pkg_name}"
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/$pkg_name
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _ripgrep() {
@@ -262,7 +263,7 @@ function _ripgrep() {
     fi
 
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/rg
+    ln -sf $pkg_bin $BIN_DIR/rg
 }
 
 function _trans() {
@@ -278,7 +279,7 @@ function _trans() {
 
     curl -sLO "$src_uri"
     chmod +x $pkg_bin
-    ln -sf $pkg_bin $PREFIX_ROOT/bin/trans
+    ln -sf $pkg_bin $BIN_DIR/trans
 }
 
 ### run this script

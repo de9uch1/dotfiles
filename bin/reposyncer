@@ -39,6 +39,8 @@ function parse_args() {
                 elif [[ "$1" =~ "x" ]]; then
                     excludes=("${excludes[@]}" "--exclude=$2")
                     shift 2
+                else
+                    shift
                 fi
                 ;;
             *)

@@ -67,7 +67,7 @@ function main() {
     local host="${argv[1]}"
     local file="$(realpath ${argv[2]})"
 
-    if ! [[ -e "$file" ]]; then
+    if ! [[ -e "$file" ]] && [[ $mode = "push" ]]; then
         raise "$file not found."
     fi
 

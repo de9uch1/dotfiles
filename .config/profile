@@ -80,7 +80,7 @@ export PYENV_ROOT=$HOME/.pyenv
 add_path \
     $PYENV_ROOT/bin \
     $PYENV_ROOT/shims \
-    $HOME/.poetry/bin \
+    $HOME/.poetry/bin
 
 # My Configurations
 add_path \

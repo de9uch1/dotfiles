@@ -8,8 +8,8 @@
     co = checkout
     df = diff
     st = status
-    p = pull
-    pu = push
+    pl = pull
+    ps = push
     l = log
 
 [color]

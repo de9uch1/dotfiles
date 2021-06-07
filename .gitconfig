@@ -11,6 +11,8 @@
     pl = pull
     ps = push
     l = log
+    f = fetch
+    rso = reset --hard origin/master
 
 [color]
     ui = auto

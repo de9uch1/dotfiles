@@ -55,23 +55,32 @@ function parse_args() {
 }
 
 function _shell() {
-    env -i \
-        HOME=$HOME \
-        PREFIX_SYSTEM=$PREFIX_SYSTEM \
-        INTR_SHELL=$1 \
-        bash -li
+    echo "Switching to $1..."
+    env INTR_SHELL=$1 bash -li
 }
 
 function _prefix() {
+    echo "Switching to $1..."
     env -i \
-        HOME=$HOME \
+        $RETAIN \
         PREFIX_SYSTEM=$1 \
-        INTR_SHELL=$INTR_SHELL \
         bash -li
+}
+
+function append_retain() {
+    local val="$(eval echo \$$1)"
+    [[ -n $val ]] && RETAIN+=" $1=$val"
 }
 
 function main() {
     parse_args $@
+
+    RETAIN="HOME=$HOME TERM=$TERM USER=$USER"
+    append_retain SSH_AUTH_SOCK
+    append_retain DISPLAY
+    append_retain PREFIX_SYSTEM
+    append_retain INTR_SHELL
+
     _$TARGET $ENV
 }
 

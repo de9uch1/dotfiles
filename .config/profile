@@ -42,7 +42,8 @@ export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
 export FZF_LEGACY_KEYBINDINGS=0
 export FILTER="fzf $FZF_DEFAULT_OPTS"
 
-PREFIX_SYSTEM=${PREFIX_SYSTEM:-gentoo}
+export PREFIX_SYSTEM=${PREFIX_SYSTEM:-gentoo}
+export INTR_SHELL=${INTR_SHELL:-fish}
 
 ### Gentoo system
 if [[ -d $HOME/gentoo ]] && \

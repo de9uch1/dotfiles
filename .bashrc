@@ -16,10 +16,9 @@ if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]] && [[ $PREF
 fi
 
 # Avoid executing fish shell in "dumb" TERM enviroment
+export INTR_SHELL=${INTR_SHELL:-fish}
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
     INTR_SHELL=bash
-else
-    INTR_SHELL=${INTR_SHELL:-fish}
 fi
 
 # exec fish shell

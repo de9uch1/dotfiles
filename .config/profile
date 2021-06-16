@@ -91,9 +91,9 @@ fi
 add_path $CARGO_HOME/bin
 
 #### Ruby
-if command -v ruby >/dev/null; then
-    add_path $(ruby -e 'puts Gem.user_dir')/bin
-fi
+# if command -v ruby >/dev/null; then
+#     add_path $(ruby -e 'puts Gem.user_dir')/bin
+# fi
 
 #### Python
 export PYENV_ROOT=$HOME/.pyenv

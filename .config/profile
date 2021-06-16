@@ -10,9 +10,8 @@ function add_path() {
 }
 
 ### enviroment variables
+source $HOME/.envvars
 export LANG=en_US.UTF-8
-[[ -z $NOFISH ]] && export NOFISH=0
-
 export KERNEL_TYPE=$(uname)
 export CPU_TYPE=$(uname -m)
 
@@ -51,15 +50,20 @@ if [[ -d $HOME/gentoo ]] && \
        [[ $PREFIX_SYSTEM = gentoo ]]; then
     export EPREFIX=$(realpath $HOME/gentoo)
 fi
-if [[ -f $EPREFIX/etc/os-release ]]; then
-    source $EPREFIX/etc/os-release
-    export DISTRIB_ID="${ID}"
+if [[ $PREFIX_SYSTEM = gentoo ]] && \
+       [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
+       [[ -f $EPREFIX/startprefix ]]; then
+    exec $EPREFIX/startprefix
+    if [[ -f $EPREFIX/etc/os-release ]]; then
+        source $EPREFIX/etc/os-release
+        export DISTRIB_ID="${ID}"
+    fi
 fi
 
 ### linuxbrew
-if [[ -d $HOME/.linuxbrew ]] && \
-       [[ $CPU_TYPE = x86_64 ]] && \
-       [[ $PREFIX_SYSTEM = brew ]]; then
+if [[ $PREFIX_SYSTEM = brew ]] && \
+       [[ -d $HOME/.linuxbrew ]] && \
+       [[ $CPU_TYPE = x86_64 ]]; then
     export HOMEBREW_PREFIX="$HOME/.linuxbrew";
     export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
     export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
@@ -109,5 +113,4 @@ if ! command -v starship >/dev/null; then
     curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
 fi
 
-source $HOME/.envvars
 export LOADED_PROFILE=${BASH_SOURCE:-$0}

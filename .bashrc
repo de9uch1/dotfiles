@@ -10,11 +10,6 @@ if [[ $- != *i* ]]; then
     return
 fi
 
-# for Gentoo Prefix
-if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]] && [[ $PREFIX_SYSTEM = gentoo ]]; then
-    exec $EPREFIX/startprefix
-fi
-
 # Avoid executing fish shell in "dumb" TERM enviroment
 export INTR_SHELL=${INTR_SHELL:-fish}
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then

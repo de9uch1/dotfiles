@@ -42,14 +42,29 @@ export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
 export FZF_LEGACY_KEYBINDINGS=0
 export FILTER="fzf $FZF_DEFAULT_OPTS"
 
+PREFIX_SYSTEM=${PREFIX_SYSTEM:-gentoo}
+
 ### Gentoo system
-if [[ -d $HOME/gentoo ]] && [[ $CPU_TYPE = x86_64 ]] && [[ -z $NO_GENTOO ]]; then
+if [[ -d $HOME/gentoo ]] && \
+       [[ $CPU_TYPE = x86_64 ]] && \
+       [[ $PREFIX_SYSTEM = gentoo ]]; then
     export EPREFIX=$(realpath $HOME/gentoo)
 fi
-
 if [[ -f $EPREFIX/etc/os-release ]]; then
     source $EPREFIX/etc/os-release
     export DISTRIB_ID="${ID}"
+fi
+
+### linuxbrew
+if [[ -d $HOME/.linuxbrew ]] && \
+       [[ $CPU_TYPE = x86_64 ]] && \
+       [[ $PREFIX_SYSTEM = brew ]]; then
+    export HOMEBREW_PREFIX="$HOME/.linuxbrew";
+    export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
+    export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
+    export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
+    export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}";
 fi
 
 ### Emacs

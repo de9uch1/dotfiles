@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+function help() {
+    cat << __EOT__ >&2
+Usage: $(basename $0) TARGET ENV
+
+TARGET           ENV
+-----------------------------------
+shell            bash, fish
+prefix           gentoo, brew, none
+__EOT__
+}
+
+function parse_args() {
+    case $1 in
+        shell)
+            TARGET=shell
+            ;;
+        prefix)
+            TARGET=prefix
+            ;;
+        *)
+            help
+            exit 1
+    esac
+
+    if [[ $TARGET = shell ]]; then
+        case $2 in
+            bash)
+                ENV=bash
+                ;;
+            fish)
+                ENV=fish
+                ;;
+            *)
+                help
+                exit 1
+        esac
+    elif [[ $TARGET = prefix ]]; then
+        case $2 in
+            gentoo)
+                ENV=gentoo
+                ;;
+            brew)
+                ENV=brew
+                ;;
+            none)
+                ENV=none
+                ;;
+            *)
+                help
+                exit 1
+        esac
+    fi
+}
+
+function _shell() {
+    env -i \
+        HOME=$HOME \
+        PREFIX_SYSTEM=$PREFIX_SYSTEM \
+        INTR_SHELL=$1 \
+        bash -li
+}
+
+function _prefix() {
+    env -i \
+        HOME=$HOME \
+        PREFIX_SYSTEM=$1 \
+        INTR_SHELL=$INTR_SHELL \
+        bash -li
+}
+
+function main() {
+    parse_args $@
+    _$TARGET $ENV
+}
+
+main $@

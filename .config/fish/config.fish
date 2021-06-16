@@ -98,10 +98,6 @@ if [ "{$DISTRIB_ID}x" = "gentoox" ]
     end
 end
 
-function bash-no-gentoo
-    env -i NO_GENTOO=1 HOME=$HOME bash
-end
-
 ### Python
 if command -v pyenv >/dev/null
     set -gx PYENV_SHELL fish

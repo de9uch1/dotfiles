@@ -11,7 +11,7 @@ if [[ $- != *i* ]]; then
 fi
 
 # for Gentoo Prefix
-if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]] && [[ -z $NO_GENTOO ]]; then
+if [[ ${SHELL#$EPREFIX} = $SHELL ]] && [[ -f $EPREFIX/startprefix ]] && [[ $PREFIX_SYSTEM = gentoo ]]; then
     exec $EPREFIX/startprefix
 fi
 
@@ -49,6 +49,11 @@ alias e='emacsclient -a "emacs"'
 function search() {
     w3m "http://google.com/search?q=$*"
 }
+
+# Prompt
+if command -v starship >/dev/null; then
+    eval $(starship init bash)
+fi
 
 # Python
 if command -v pyenv >/dev/null; then

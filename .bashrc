@@ -1,13 +1,45 @@
 #!/usr/bin/env bash
 # -*- mode:shell-script; sh-indentation:4; coding:utf-8 -*-
 
-# for non-interactive shell
 if [[ -z "${LOADED_PROFILE}" ]]; then
     source $HOME/.config/profile
 fi
 
+# for non-interactive shell
 if [[ $- != *i* ]]; then
     return
+fi
+
+export KERNEL_TYPE=$(uname)
+export CPU_TYPE=$(uname -m)
+
+### Gentoo system
+if [[ $PREFIX_SYSTEM = gentoo ]] && \
+       [[ -d $HOME/gentoo ]] && \
+       [[ $CPU_TYPE = x86_64 ]]; then
+    export EPREFIX=$(realpath $HOME/gentoo)
+fi
+if [[ $PREFIX_SYSTEM = gentoo ]] && \
+       [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
+       [[ -f $EPREFIX/startprefix ]]; then
+    exec $EPREFIX/startprefix
+    if [[ -f $EPREFIX/etc/os-release ]]; then
+        source $EPREFIX/etc/os-release
+        export DISTRIB_ID="${ID}"
+    fi
+fi
+
+### linuxbrew
+if [[ $PREFIX_SYSTEM = brew ]] && \
+       [[ -d $HOME/.linuxbrew ]] && \
+       [[ $CPU_TYPE = x86_64 ]]; then
+    echo "Entering brew..."
+    export HOMEBREW_PREFIX="$HOME/.linuxbrew"
+    export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
+    export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
+    export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}"
+    export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:"
+    export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}"
 fi
 
 # Avoid executing fish shell in "dumb" TERM enviroment
@@ -35,14 +67,8 @@ alias lla='ls -lha $*'
 alias findn='find . -name $*'
 alias duc='du -had1 $*'
 alias p='ps aux | grep $* | grep -v grep'
-alias mozc-wordregister="$EPREFIX/usr/lib/mozc/mozc_tool --mode=word_register_dialog"
 alias emacs='emacsclient -a "emacs"'
 alias e='emacsclient -a "emacs"'
-
-# functions
-function search() {
-    w3m "http://google.com/search?q=$*"
-}
 
 # Prompt
 if command -v starship >/dev/null; then

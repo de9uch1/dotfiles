@@ -89,7 +89,7 @@ function main() {
     fi
 
     rsync \
-        -achuvzP --delete $dry_run \
+        -achuvzP $dry_run \
         --exclude-from="$excludes_file" "${excludes[@]}" \
         "$src" "$dst"
 }

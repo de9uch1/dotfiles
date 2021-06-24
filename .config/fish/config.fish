@@ -118,6 +118,19 @@ end
 ### Aliases
 alias g "git"
 alias gs "git status"
+function p2sp
+    set -l target (basename $argv[1] .pdf)
+    echo "$target.pdf -> $target.svg"
+    pdf2svg "$target.pdf" "$target.svg" $argv[2]
+end
+function p2s
+    for filename in $argv
+        set -l target (basename "$filename" .pdf)
+        echo "$target.pdf -> $target.svg"
+        pdf2svg "$target.pdf" "$target.svg"
+    end
+end
+
 ## pip install trasn-cli
 if command -v trash >/dev/null
     alias rm "trash -v"

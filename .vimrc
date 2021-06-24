@@ -2,7 +2,7 @@ set number
 set cin
 syntax on
 filetype on
-set backspace=indet,eol,start
+set backspace=indent,eol,start
 set encoding=utf-8
 set termencoding=utf-8
 set ts=4
@@ -13,7 +13,7 @@ set autoread
 set expandtab
 set indentkeys=o,O
 set termguicolors
-set hlserch
+set hlsearch
 set incsearch
 set ruler
 set ttyfast

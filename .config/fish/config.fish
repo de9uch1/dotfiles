@@ -118,6 +118,11 @@ end
 ### Aliases
 alias g "git"
 alias gs "git status"
+alias po "poetry"
+alias pos "poetry shell"
+alias por "poetry run"
+alias popip "poetry run pip"
+
 function p2sp
     set -l target (basename $argv[1] .pdf)
     echo "$target.pdf -> $target.svg"

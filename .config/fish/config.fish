@@ -138,7 +138,7 @@ end
 
 ## pip install trasn-cli
 if command -v trash >/dev/null
-    alias rm "trash -v"
+    alias rm "trash --trash-dir=$XDG_DATA_HOME/Trash -v"
 else
     alias rm "rm -iv"
 end

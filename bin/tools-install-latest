@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 
-TOOLS="fzf ghq gotop pandoc trans"
+TOOLS="
+    fzf
+    ghq
+    gotop
+    pandoc
+    trans
+"
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
 SRC_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/src})
-BIN_DIR=$(realpath ${SRC_DIR:-$PREFIX_ROOT/bin})
+BIN_DIR=$(realpath ${BIN_DIR:-$PREFIX_ROOT/bin})
 mkdir -p $SRC_DIR/ $BIN_DIR/
 
 ### core functions
@@ -152,7 +158,7 @@ function _pandoc() {
                         grep -Eo "tag/[0-9\.]+" | \
                         uniq | \
                         cut -c 5-)
- n   local src_uri="$repository/releases/download/${version}/pandoc-${version}-${OS_TYPE}-${_CPU_TYPE}.tar.gz"
+    local src_uri="$repository/releases/download/${version}/pandoc-${version}-${OS_TYPE}-${_CPU_TYPE}.tar.gz"
     local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
     local pkg_bin=$pkg_dir/bin/$pkg_name
 

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+# -*- coding: utf-8; mode: shell-script -*-
 
+## Basic functions
 function add_path() {
     while [[ $# -gt 0 ]]; do
         if [[ ":${PATH}:" != *:"$1":* ]]; then
@@ -9,17 +11,31 @@ function add_path() {
     done
 }
 
-### enviroment variables
+function _realpath() {
+    if command -v realpath >/dev/null; then
+        realpath "$*"
+    else
+        TARGET_FILE=$1
+        while [[ -n "$TARGET_FILE" ]]; do
+            cd $(dirname $TARGET_FILE)
+            FILENAME=$(basename $TARGET_FILE)
+            TARGET_FILE=$(readlink $FILENAME)
+        done
+        echo $(pwd -P)/$FILENAME
+    fi
+}
+
+## Enviroment variables
 source $HOME/.envvars
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
+export DOTFILES_ROOT="$(_realpath $(dirname $(_realpath ${BASH_SOURCE:-0}))/..)"
 
-### System Configurations
-#### ssh-agent
+## System Configurations
+### ssh-agent
 VCS_KEY="$HOME/.ssh/conf.d/vcs/id_rsa"
-
 function start-ssh-agent() {
     if [[ -f $HOME/.ssh-agent ]]; then
         source $HOME/.ssh-agent >/dev/null
@@ -30,57 +46,57 @@ function start-ssh-agent() {
     fi
     ssh-add $VCS_KEY >/dev/null 2>&1
 }
-
 if ! ssh-add -l >& /dev/null && [[ -f $VCS_KEY ]]; then
     start-ssh-agent
 fi
 
-### CLI tools 
-export GHQ_ROOT=$HOME/src
-export GHQ_SELECTOR=fzf
-export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
-export FZF_LEGACY_KEYBINDINGS=0
-export FILTER="fzf $FZF_DEFAULT_OPTS"
-
-### Emacs
-# export EMACS_SERVER_FILE=$HOME/.emacs.d/tmp/server/server
-
-### Programming Languages
-#### Go
+## Programming Languages
+### Go
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin
-
-#### Rust
-CARGO_HOME=$HOME/.cargo
+### Rust
+export CARGO_HOME=$HOME/.cargo
+add_path $CARGO_HOME/bin
 if ! [[ -d $CARGO_HOME ]]; then
     read -p "==> Do you install Rust? [y/N] " install_rust
     if [[ "$install_rust" = "y" ]]; then
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
     fi
 fi
-add_path $CARGO_HOME/bin
-
-#### Ruby
+### Ruby
 # if command -v ruby >/dev/null; then
 #     add_path $(ruby -e 'puts Gem.user_dir')/bin
 # fi
-
-#### Python
+### Python
 export PYENV_ROOT=$HOME/.pyenv
 add_path \
     $PYENV_ROOT/bin \
     $PYENV_ROOT/shims \
     $HOME/.poetry/bin
 
-# My Configurations
+## My Configurations
+### PATH
 add_path \
     $HOME/bin \
     $HOME/.local/bin \
     $HOME/local/bin
-
 ### Prompt: Starship
 if ! command -v starship >/dev/null; then
     curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
 fi
 
+## CLI tools
+### ghq
+export GHQ_ROOT=$HOME/src
+export GHQ_SELECTOR=fzf
+### fzf
+export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"
+export FZF_LEGACY_KEYBINDINGS=0
+export FILTER="fzf $FZF_DEFAULT_OPTS"
+### skim
+export SKIM_DEFAULT_OPTIONS="--height 30% --layout reverse-list"
+### trash-cli
+export TRASH_DISABLED=${TRASH_DISABLED:-0}
+
+## Set the signature
 export LOADED_PROFILE=${BASH_SOURCE:-$0}

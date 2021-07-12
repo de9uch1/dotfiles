@@ -1,29 +1,30 @@
-# -*- mode: fish -*-
+#/usr/bin/env fish
+# -*- coding: utf-8; mode: fish -*-
 
 set FISH_CONFIG_DIR $HOME/.config/fish
 
-# for non-interactive shell
+## For non-interactive shell
 # if [ $TERM = "dumb" ] || [ $TERM = "eterm-color" ]
 #     set -x SHELL (which bash)
 #     exec bash
 # end
 
-### Theme: Dracula
+## Theme: Dracula
 if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     mkdir -p $FISH_CONFIG_DIR/conf.d
     curl -o $FISH_CONFIG_DIR/conf.d/dracula.fish \
         "https://raw.githubusercontent.com/dracula/fish/master/conf.d/dracula.fish"
 end
 
-### Greeting
+## Disable Greeting
 set fish_greeting
 
-### Prompt: Starship
+## Prompt: Starship
 if command -v starship >/dev/null
     starship init fish | source
 end
 
-### Plugin Manager: Fisher
+## Plugin Manager: Fisher
 set FISHER_INITIALIZED "$FISH_CONFIG_DIR/.fisher"
 if not [ -f $FISHER_INITIALIZED ]
     echo "==> Fisher not found. Installing..."
@@ -31,11 +32,7 @@ if not [ -f $FISHER_INITIALIZED ]
     curl -sL https://git.io/fisher | source; and fisher update
 end
 
-#### enhancd
-bind --erase \ef
-# set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
-
-### Enviroment Variables
+## Enviroment Variables
 function reload_profile
     bass source $HOME/.config/profile
 end
@@ -43,7 +40,7 @@ if [ -z "$LOADED_PROFILE" ]; and type -q bass
     reload_profile
 end
 
-### Functions
+## Basic Functions
 function add_path
     set -l maybe_path $argv[1]
     if not contains $maybe_path $PATH
@@ -53,14 +50,14 @@ end
 
 function err
     echo "$argv"
-    return -1
+    return 1
 end
 
-#### dotfiles
+## Manage Dotfiles
 function dots
     set -l usage "usage: dots [u]"
     if [ (count $argv) != 1 ]
-        err "$usage" || return -1
+        err "$usage"
     end
     switch $argv[1]
         case u up update upgrade pull
@@ -69,17 +66,16 @@ function dots
             make link
             popd
         case *
-            err "$usage" || return -1
+            err "$usage"
     end
 end
 
-### Gentoo System
+## Gentoo System
 if [ "{$DISTRIB_ID}x" = "gentoox" ]
-    # app-portage/portage-utils
+    ### app-portage/portage-utils
     alias lastsync 'qlop -s | tail -n1'
     alias qtime 'qlop -tv'
-
-    # app-portage/flaggie
+    ### app-portage/flaggie
     function acckw
         switch $argv[1]
             case a
@@ -98,7 +94,8 @@ if [ "{$DISTRIB_ID}x" = "gentoox" ]
     end
 end
 
-### Python
+## Python
+### pyenv
 if command -v pyenv >/dev/null
     set -gx PYENV_SHELL fish
     source "$PYENV_ROOT/libexec/../completions/pyenv.fish"
@@ -115,14 +112,16 @@ if command -v pyenv >/dev/null
     end
 end
 
-### Aliases
+## Aliases
+### git
 alias g "git"
 alias gs "git status"
+### poetry
 alias po "poetry"
 alias pos "poetry shell"
 alias por "poetry run"
 alias popip "poetry run pip"
-
+### pdf2svg
 function p2sp
     set -l target (basename $argv[1] .pdf)
     echo "$target.pdf -> $target.svg"
@@ -136,9 +135,50 @@ function p2s
     end
 end
 
-## pip install trasn-cli
-if command -v trash >/dev/null
+## CLI tools
+### enhancd
+if type -q enhancd
+    bind --erase \ef
+    # set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
+end
+### lsd : ls : cargo install lsd
+if command -v lsd >/dev/null
+    alias l "lsd"
+    alias ls "lsd"
+    alias ll "ls -l"
+    alias la "ls -a"
+    alias lla "ll -a"
+end
+### bat : cat : cargo install bat
+if command -v bat >/dev/null
+    alias c "bat -p"
+    alias cat "bat -p"
+end
+### git-delta : diff : cargo install git-delta
+if command -v delta >/dev/null
+    alias df "delta"
+end
+### trash-cli : rm : pip install trash-cli
+if command -v trash >/dev/null; and [ $TRASH_DISABLED = 0 ]
     alias rm "trash --trash-dir=$XDG_DATA_HOME/Trash -v"
 else
     alias rm "rm -iv"
+end
+### du-dust : du : cargo install du-dust
+if command -v du-dust >/dev/null
+    alias du "du-dust"
+end
+
+## Emacs
+### vterm
+function vterm_printf;
+    if begin; [  -n "$TMUX" ]  ; and  string match -q -r "screen|tmux" "$TERM"; end 
+        # tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$argv"
+    else if string match -q -- "screen*" "$TERM"
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$argv"
+    else
+        printf "\e]%s\e\\" "$argv"
+    end
 end

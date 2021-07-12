@@ -1,0 +1,32 @@
+#!/bin/sh
+
+CARGO_PKGS="
+    cargo-update
+    bandwhich
+    bat
+    fd-find
+    procs
+    ripgrep
+    lsd
+    git-delta
+    skim
+    du-dust
+    choose
+    sd
+"
+PIP_PKGS="
+    python-language-server[all]
+    make-runner
+    py-spy
+    trash-cli
+"
+
+if command -v cargo; then
+    cargo install $CARGO_PKGS
+    cargo install-update -a
+fi
+
+PIP_PATH=$(command -v pip)
+if [ "${PIP_PATH##$HOME}" != "${PIP_PATH}" ]; then
+    pip install -U $PIP_PKGS
+fi

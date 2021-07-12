@@ -1,3 +1,0 @@
-#!/bin/sh
-
-cargo install bat fd-find procs ripgrep

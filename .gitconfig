@@ -12,7 +12,8 @@
     ps = push
     l = log
     f = fetch
-    rso = reset --hard origin/master
+	rso = reset --hard origin/master
+	cfg = config
 
 [color]
     ui = auto

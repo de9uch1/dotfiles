@@ -30,3 +30,10 @@ PIP_PATH=$(command -v pip)
 if [ "${PIP_PATH##$HOME}" != "${PIP_PATH}" ]; then
     pip install -U $PIP_PKGS
 fi
+
+mkdir -p $HOME/.local/bin/
+curl \
+    -sL \
+    -o $HOME/.local/bin/git-rsync \
+    https://raw.githubusercontent.com/de9uch1/git-rsync/master/git-rsync
+chmod +x $HOME/.local/bin/git-rsync

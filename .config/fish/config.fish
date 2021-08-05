@@ -156,7 +156,8 @@ if command -v bat >/dev/null
 end
 ### git-delta : diff : cargo install git-delta
 if command -v delta >/dev/null
-    alias df "delta"
+    alias dif "delta"
+    alias dlt "delta"
 end
 ### trash-cli : rm : pip install trash-cli
 if command -v trash >/dev/null; and [ $TRASH_DISABLED = 0 ]

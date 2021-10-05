@@ -151,8 +151,8 @@ if command -v lsd >/dev/null
 end
 ### bat : cat : cargo install bat
 if command -v bat >/dev/null
-    alias c "bat -p"
-    alias cat "bat -p"
+    alias c "bat"
+    alias cat "bat"
 end
 ### git-delta : diff : cargo install git-delta
 if command -v delta >/dev/null

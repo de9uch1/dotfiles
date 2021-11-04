@@ -5,8 +5,7 @@ font:
     normal:
         family: Cica
         style: Regular
-    size: 14
-    antialias: true
+    size: 12
     offset:
         x: 0
         y: 2

@@ -21,8 +21,8 @@ if [[ $PREFIX_SYSTEM = gentoo ]] && \
 fi
 if [[ $PREFIX_SYSTEM = gentoo ]] && \
        [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
-       [[ -f $EPREFIX/startprefix ]]; then
-    exec $EPREFIX/startprefix
+       [[ -f $HOME/bin/startprefix ]]; then
+    exec $HOME/bin/startprefix
     if [[ -f $EPREFIX/etc/os-release ]]; then
         source $EPREFIX/etc/os-release
         export DISTRIB_ID="${ID}"

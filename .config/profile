@@ -11,42 +11,34 @@ function add_path() {
     done
 }
 
-function _realpath() {
-    if command -v realpath >/dev/null; then
-        realpath "$*"
-    else
-        TARGET_FILE=$1
-        while [[ -n "$TARGET_FILE" ]]; do
-            cd $(dirname $TARGET_FILE)
-            FILENAME=$(basename $TARGET_FILE)
-            TARGET_FILE=$(readlink $FILENAME)
-        done
-        echo $(pwd -P)/$FILENAME
-    fi
-}
-
 ## Enviroment variables
-source $HOME/.envvars
+[[ -f $HOME/.envvars ]] && source $HOME/.envvars
 export LANG=en_US.UTF-8
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_CACHE_HOME=$HOME/.cache
-export XDG_DATA_HOME=$HOME/.local/share
-export DOTFILES_ROOT="$(_realpath $(dirname $(_realpath ${BASH_SOURCE:-0}))/..)"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+if [[ -n "$SSH_CONNECTION" ]] || [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+    export SSH_SERVER=1
+fi
 
 ## System Configurations
+### Basic directory
+mkdir -p \
+      $HOME/.local/bin \
+      $HOME/.local/src \
+      $HOME/.local/share
 ### ssh-agent
-VCS_KEY="$HOME/.ssh/conf.d/vcs/id_rsa"
 function start-ssh-agent() {
     if [[ -f $HOME/.ssh-agent ]]; then
         source $HOME/.ssh-agent >/dev/null
     fi
-    if [[ -z $SSH_AGENT_PID ]] || ! kill -0 $SSH_AGENT_PID; then
+    if [[ -z $SSH_AGENT_PID ]] || ! kill -0 $SSH_AGENT_PID >/dev/null 2>&1; then
         ssh-agent > $HOME/.ssh-agent
         source $HOME/.ssh-agent >/dev/null
     fi
-    ssh-add $VCS_KEY >/dev/null 2>&1
+    ssh-add "$HOME/.ssh/conf.d/vcs/id_rsa" >/dev/null 2>&1
 }
-if ! ssh-add -l >& /dev/null && [[ -f $VCS_KEY ]]; then
+if [[ -z $SSH_SERVER ]] && ! ssh-add -l >& /dev/null; then
     start-ssh-agent
 fi
 

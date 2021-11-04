@@ -3,12 +3,6 @@
 
 set FISH_CONFIG_DIR $HOME/.config/fish
 
-## For non-interactive shell
-# if [ $TERM = "dumb" ] || [ $TERM = "eterm-color" ]
-#     set -x SHELL (which bash)
-#     exec bash
-# end
-
 ## Theme: Dracula
 if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     mkdir -p $FISH_CONFIG_DIR/conf.d

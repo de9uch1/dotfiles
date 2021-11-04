@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if [[ -d $HOME/.pyenv ]]; then
+    cd $HOME/.pyenv
+    git pull
+else
+    if command -v git >/dev/null; then
+        git clone "https://github.com/pyenv/pyenv.git" $HOME/.pyenv
+    else
+        echo "'git' not found, abort."
+        exit -1
+    fi
+fi
+
+if ! command -v pyenv >/dev/null; then
+    echo "'pyenv' not found, abort."
+    exit -1
+fi

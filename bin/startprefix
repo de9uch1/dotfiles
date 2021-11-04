@@ -51,35 +51,37 @@ export SHELL
 
 # give a small notice
 echo "Entering Gentoo Prefix ${EPREFIX}"
-# start the login shell, clean the entire environment but what's needed
-RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL"
-# PROFILEREAD is necessary on SUSE not to wipe the env on shell start
-[[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"
-# ssh-agent is handy to keep, of if set, inherit it
-[[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
-# if we're on some X terminal, makes sense to inherit that too
-[[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"
-if [[ -d /proc/registry ]]; then # we're on Cygwin
-	# crucial to Windows but cannot be restored, see
-	# https://cygwin.com/ml/cygwin/2019-08/msg00072.html
-	[[ -n ${SYSTEMDRIVE} ]] && RETAIN+=" SYSTEMDRIVE=$SYSTEMDRIVE"
-	# COMSPEC is to native Windows what SHELL is to *nix
-	[[ -n ${COMSPEC} ]] && RETAIN+=" COMSPEC=$COMSPEC"
-	# some Windows programs (e.g. devenv.exe) need TMP or TEMP
-	[[ -n ${TEMP} ]] && RETAIN+=" TEMP=$TEMP"
-fi
-# my configurations
-[[ -n ${SSH_TTY} ]] && RETAIN+=" SSH_TTY=$SSH_TTY"
-[[ -n "${SSH_CLIENT}" ]] && RETAIN+=" SSH_CLIENT='$SSH_CLIENT'"
-[[ -n "${SSH_CONNECTION}" ]] && RETAIN+=" SSH_CONNECTION='$SSH_CONNECTION'"
+# # start the login shell, clean the entire environment but what's needed
+# RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL"
+# # PROFILEREAD is necessary on SUSE not to wipe the env on shell start
+# [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"
+# # ssh-agent is handy to keep, of if set, inherit it
+# [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+# # if we're on some X terminal, makes sense to inherit that too
+# [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"
+# if [[ -d /proc/registry ]]; then # we're on Cygwin
+# 	# crucial to Windows but cannot be restored, see
+# 	# https://cygwin.com/ml/cygwin/2019-08/msg00072.html
+# 	[[ -n ${SYSTEMDRIVE} ]] && RETAIN+=" SYSTEMDRIVE=$SYSTEMDRIVE"
+# 	# COMSPEC is to native Windows what SHELL is to *nix
+# 	[[ -n ${COMSPEC} ]] && RETAIN+=" COMSPEC=$COMSPEC"
+# 	# some Windows programs (e.g. devenv.exe) need TMP or TEMP
+# 	[[ -n ${TEMP} ]] && RETAIN+=" TEMP=$TEMP"
+# fi
+# # my configurations
+# [[ -n ${SSH_TTY} ]] && RETAIN+=" SSH_TTY=$SSH_TTY"
+# [[ -n "${SSH_CLIENT}" ]] && RETAIN+=" SSH_CLIENT='$SSH_CLIENT'"
+# [[ -n "${SSH_CONNECTION}" ]] && RETAIN+=" SSH_CONNECTION='$SSH_CONNECTION'"
 
 # do it!
 if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
-	"$EPREFIX/usr/bin/env" -i $RETAIN $SHELL -l
+	# "$EPREFIX/usr/bin/env" -i $RETAIN $SHELL -l
+    "$EPREFIX/usr/bin/env" SHLVL=0 $SHELL -l
 elif [[ ' bash ' == *" ${SHELL##*/} "* ]] ; then
 	# shell coming from different prefix would load it's own
 	# etc/profile upon -l, so we have to override
-	"$EPREFIX/usr/bin/env" -i ${RETAIN} "${SHELL}" --rcfile "${EPREFIX}"/etc/prefix-stack.bash_login -i
+	# "$EPREFIX/usr/bin/env" -i ${RETAIN} "${SHELL}" --rcfile "${EPREFIX}"/etc/prefix-stack.bash_login -i
+    "$EPREFIX/usr/bin/env" "${SHELL}" --rcfile "${EPREFIX}"/etc/prefix-stack.bash_login -i
 else
 	echo "Only bash is supported with stacked Prefix (you have ${SHELL##*/}), sorry!" > /dev/stderr
 	exit 1

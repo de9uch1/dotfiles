@@ -56,12 +56,13 @@ function parse_args() {
 
 function _shell() {
     echo "Switching to $1..."
-    env INTR_SHELL=$1 bash -li
+    env LOGIN_SHELL=$1 bash -li
 }
 
 function _prefix() {
     echo "Switching to $1..."
-    env -i \
+    eval \
+        env -i \
         $RETAIN \
         PREFIX_SYSTEM=$1 \
         bash -li
@@ -69,7 +70,7 @@ function _prefix() {
 
 function append_retain() {
     local val="$(eval echo \$$1)"
-    [[ -n $val ]] && RETAIN+=" $1=$val"
+    [[ -n $val ]] && RETAIN+=" $1='$val'"
 }
 
 function main() {
@@ -79,7 +80,11 @@ function main() {
     append_retain SSH_AUTH_SOCK
     append_retain DISPLAY
     append_retain PREFIX_SYSTEM
-    append_retain INTR_SHELL
+    append_retain LOGIN_SHELL
+    append_retain SSH_SERVER
+    append_retain SSH_CONNECTION
+    append_retain SSH_CLIENT
+    append_retain SSH_TTY
 
     _$TARGET $ENV
 }

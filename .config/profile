@@ -12,7 +12,6 @@ function add_path() {
 }
 
 ## Enviroment variables
-[[ -f $HOME/.envvars ]] && source $HOME/.envvars
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
@@ -20,6 +19,12 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 if [[ -n "$SSH_CONNECTION" ]] || [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
     export SSH_SERVER=1
 fi
+
+[[ -n "$LOGIN_SHELL" ]] && _LOGIN_SHELL="$LOGIN_SHELL"
+[[ -n "$PREFIX_SYSTEM" ]] && _PREFIX_SYSTEM="$PREFIX_SYSTEM"
+[[ -f $HOME/.envvars ]] && source $HOME/.envvars
+export LOGIN_SHELL=${_LOGIN_SHELL:-${LOGIN_SHELL:-fish}}
+export PREFIX_SYSTEM=${_PREFIX_SYSTEM:-${PREFIX_SYSTEM:-gentoo}}
 
 ## System Configurations
 ### Basic directory

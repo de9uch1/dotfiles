@@ -166,7 +166,7 @@ end
 
 ## Emacs
 ### vterm
-function vterm_printf;
+function vterm_printf
     if begin; [  -n "$TMUX" ]  ; and  string match -q -r "screen|tmux" "$TERM"; end 
         # tell tmux to pass the escape sequences through
         printf "\ePtmux;\e\e]%s\007\e\\" "$argv"

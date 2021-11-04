@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # -*- mode:shell-script; sh-indentation:4; coding:utf-8 -*-
 
+# Setup
 if [[ -z "${LOADED_PROFILE}" ]]; then
     source $HOME/.config/profile
 fi
@@ -19,7 +20,7 @@ if [[ $PREFIX_SYSTEM = gentoo ]] && \
        [[ $CPU_TYPE = x86_64 ]]; then
     export EPREFIX=$(realpath $HOME/gentoo)
 fi
-if [[ $PREFIX_SYSTEM = gentoo ]] && \
+if [[ -n $EPREFIX ]] && \
        [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
        [[ -f $HOME/bin/startprefix ]]; then
     exec $HOME/bin/startprefix
@@ -43,15 +44,15 @@ if [[ $PREFIX_SYSTEM = brew ]] && \
 fi
 
 # Avoid executing fish shell in "dumb" TERM enviroment
-export INTR_SHELL=${INTR_SHELL:-fish}
 if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
-    INTR_SHELL=bash
+    LOGIN_SHELL=bash
 fi
 
 # exec fish shell
 if FISH_COMMAND=$(command -v fish) && \
         [[ -x "$FISH_COMMAND" ]] && \
-        [[ "$INTR_SHELL" = "fish" ]]; then
+        [[ "$LOGIN_SHELL" = "fish" ]]; then
+    export SHLVL=$(( $SHLVL - 1 ))
     SHELL="$FISH_COMMAND" PATH="$PATH" exec fish
 fi
 
@@ -103,7 +104,7 @@ if [[ $KERNEL_TYPE = FreeBSD ]]; then
 fi
 
 # for Gentoo system
-function gentoo-mode(){
+function gentoo-mode() {
 	# app-portage/portage-utils
 	alias lastsync='qlop -s | tail -n1'
 	alias qtime='qlop -tv'
@@ -128,4 +129,6 @@ function gentoo-mode(){
 		esac
 	}
 }
-[[ $DISTRIB_ID = gentoo ]] && gentoo-mode
+if [[ $DISTRIB_ID = gentoo ]]; then
+    gentoo-mode
+fi

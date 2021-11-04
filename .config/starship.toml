@@ -1,66 +1,66 @@
 # Warning: This config does not include keys that have an unset value
-format = """
-$username\
-$hostname\
-$shlvl\
-$kubernetes\
-$directory\
-$vcsh\
-$git_branch\
-$git_commit\
-$git_state\
-$git_status\
-$hg_branch\
-$docker_context\
-$package\
-$cmake\
-$dart\
-$deno\
-$dotnet\
-$elixir\
-$elm\
-$erlang\
-$golang\
-$helm\
-$java\
-$julia\
-$kotlin\
-$nim\
-$nodejs\
-$ocaml\
-$perl\
-$php\
-$purescript\
-$python\
-$red\
-$ruby\
-$rust\
-$scala\
-$swift\
-$terraform\
-$vagrant\
-$zig\
-$nix_shell\
-$conda\
-$memory_usage\
-$aws\
-$gcloud\
-$openstack\
-$env_var\
-$crystal\
-$custom\
-$lua\
-$battery\
-$cmd_duration\
-$time\
-$line_break\
-$jobs\
-$status\
-$shell\
-$character"""
+# format = """
+# $username\
+# $hostname\
+# $shlvl\
+# $kubernetes\
+# $directory\
+# $vcsh\
+# $git_branch\
+# $git_commit\
+# $git_state\
+# $git_status\
+# $hg_branch\
+# $docker_context\
+# $package\
+# $cmake\
+# $dart\
+# $deno\
+# $dotnet\
+# $elixir\
+# $elm\
+# $erlang\
+# $golang\
+# $helm\
+# $java\
+# $julia\
+# $kotlin\
+# $nim\
+# $nodejs\
+# $ocaml\
+# $perl\
+# $php\
+# $purescript\
+# $python\
+# $red\
+# $ruby\
+# $rust\
+# $scala\
+# $swift\
+# $terraform\
+# $vagrant\
+# $zig\
+# $nix_shell\
+# $conda\
+# $memory_usage\
+# $aws\
+# $gcloud\
+# $openstack\
+# $env_var\
+# $crystal\
+# $custom\
+# $lua\
+# $battery\
+# $cmd_duration\
+# $time\
+# $line_break\
+# $jobs\
+# $status\
+# $shell\
+# $character"""
 scan_timeout = 0
 command_timeout = 0
-add_newline = false
+add_newline = true
 
 [aws]
 format = 'on [$symbol($profile )(\($region\) )]($style)'
@@ -95,8 +95,8 @@ detect_folders = []
 
 [cmd_duration]
 min_time = 100
-format = '[❮ $duration]($style) '
-style = 'cyan dimmed bold'
+format = '[❮❮ $duration]($style) '
+style = '180'
 show_milliseconds = true
 disabled = false
 show_notifications = false
@@ -245,9 +245,9 @@ disabled = false
 [gcloud.region_aliases]
 
 [git_branch]
-format = '[$symbol$branch]($style)(:[$remote]($style)) [❯](white dimmed) '
+format = '[$symbol$branch]($style)(:[$remote]($style)) [❯❯](white) '
 symbol = ' '
-style = 'bold purple '
+style = 'purple '
 truncation_length = 9223372036854775807
 truncation_symbol = '…'
 only_attached = false
@@ -283,7 +283,7 @@ ahead = '⇡'
 behind = '⇣'
 diverged = '⇕'
 conflicted = '='
-deleted = '✘'
+deleted = '✘ '
 renamed = '»'
 modified = '!'
 staged = '+'
@@ -329,7 +329,7 @@ disabled = true
 [hostname]
 ssh_only = false
 trim_at = '.'
-format = '[@$hostname]($style) [❯](white dimmed) '
+format = '[@$hostname]($style) [❯❯](white) '
 style = 'blue bold'
 disabled = false
 
@@ -538,16 +538,17 @@ detect_files = ['spago.dhall']
 detect_folders = []
 
 [python]
-pyenv_version_name = false
+pyenv_version_name = true
 pyenv_prefix = 'pyenv '
 python_binary = [
     'python',
     'python3',
     'python2',
 ]
-format = '[${symbol}${pyenv_prefix}(\($virtualenv\) )]($style)'
+# format = '[${symbol}${pyenv_prefix}(@$virtualenv )]($style)'
+format = '[${symbol}${version} (\[$virtualenv\] )]($style)'
 version_format = 'v${raw}'
-style = 'cyan dimmed bold'
+style = '75'
 symbol = '🐍 '
 disabled = false
 detect_extensions = ['py']
@@ -614,23 +615,23 @@ detect_files = [
 detect_folders = ['.metals']
 
 [shell]
-format = '$indicator '
-bash_indicator = 'bsh'
-fish_indicator = 'fsh'
-zsh_indicator = 'zsh'
-powershell_indicator = 'psh'
+format = '[$indicator](68) '
+bash_indicator = 'B'
+fish_indicator = 'F'
+zsh_indicator = 'Z'
+powershell_indicator = 'P'
 ion_indicator = 'ion'
 elvish_indicator = 'esh'
-tcsh_indicator = 'tsh'
-disabled = true
+tcsh_indicator = 'C'
+disabled = false
 
 [shlvl]
-threshold = 2
+threshold = 3
 format = '[$symbol$shlvl]($style) '
-symbol = '↕️  '
+symbol = '↕️'
 repeat = false
 style = 'bold yellow'
-disabled = true
+disabled = false
 
 [singularity]
 symbol = ''
@@ -639,7 +640,7 @@ style = 'blue bold dimmed'
 disabled = false
 
 [status]
-format = '[$symbol$status]($style) '
+format = '[$symbol $status]($style) '
 symbol = '✖'
 not_executable_symbol = '🚫'
 not_found_symbol = '🔍'
@@ -672,9 +673,9 @@ detect_files = []
 detect_folders = ['.terraform']
 
 [time]
-# format = '🕙 [$time]($style) '
-format = '[❮ $time]($style) '
-style = 'bold cyan dimmed'
+format = '[🕙 $time]($style) '
+# format = '[❮ $time]($style) '
+style = '72'
 use_12hr = false
 disabled = false
 utc_time_offset = 'local'

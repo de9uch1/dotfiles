@@ -107,6 +107,8 @@ if command -v pyenv >/dev/null
 end
 
 ## Aliases
+### tmux
+alias t "tmux"
 ### git
 alias g "git"
 alias gs "git status"

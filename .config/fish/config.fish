@@ -172,7 +172,7 @@ else
 end
 ### du-dust : du : cargo install du-dust
 if command -v du-dust >/dev/null
-    alias du "du-dust"
+    alias du "dust"
 end
 
 ## Emacs

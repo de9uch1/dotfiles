@@ -119,6 +119,8 @@ abbr -ag gs    "git status"
 abbr -ag gco   "git checkout"
 abbr -ag gl    "git log"
 abbr -ag grs   "git reset --hard origin/(git branch --show-current)"
+abbr -ag gf    "git fetch"
+abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)"
 ### poetry
 abbr -ag po    "poetry"
 abbr -ag pos   "poetry shell"

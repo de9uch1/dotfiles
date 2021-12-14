@@ -13,6 +13,9 @@ end
 ## Disable Greeting
 set fish_greeting
 
+## Resets abbreviations list
+set -g fish_user_abbreviations
+
 ## Prompt: Starship
 if command -v starship >/dev/null
     starship init fish | source
@@ -67,8 +70,8 @@ end
 ## Gentoo System
 if [ "{$DISTRIB_ID}x" = "gentoox" ]
     ### app-portage/portage-utils
-    alias lastsync 'qlop -s | tail -n1'
-    alias qtime 'qlop -tv'
+    abbr -ag lastsync 'qlop -s | tail -n1'
+    abbr -ag qtime    'qlop -tv'
     ### app-portage/flaggie
     function acckw
         switch $argv[1]
@@ -106,17 +109,23 @@ if command -v pyenv >/dev/null
     end
 end
 
-## Aliases
+## Aliases / Abbreviations
 ### tmux
-alias t "tmux"
+abbr -ag t     "tmux"
+abbr -ag ta    "tmux attach -d"
 ### git
-alias g "git"
-alias gs "git status"
+abbr -ag g     "git"
+abbr -ag gs    "git status"
+abbr -ag gco   "git checkout"
+abbr -ag gl    "git log"
+abbr -ag grs   "git reset --hard origin/(git branch --show-current)"
 ### poetry
-alias po "poetry"
-alias pos "poetry shell"
-alias por "poetry run"
-alias popip "poetry run pip"
+abbr -ag po    "poetry"
+abbr -ag pos   "poetry shell"
+abbr -ag por   "poetry run"
+abbr -ag popip "poetry run pip"
+### ptpython
+abbr -a -g pp    "ptpython"
 ### pdf2svg
 function p2sp
     set -l target (basename $argv[1] .pdf)
@@ -139,16 +148,16 @@ if type -q enhancd
 end
 ### lsd : ls : cargo install lsd
 if command -v lsd >/dev/null
-    alias l "lsd"
-    alias ls "lsd"
-    alias ll "ls -l"
-    alias la "ls -a"
-    alias lla "ll -a"
+    alias ls     "lsd"
+    abbr -ag l   "ls"
+    abbr -ag ll  "ls -l"
+    abbr -ag la  "ls -a"
+    abbr -ag lla "ls -la"
 end
 ### bat : cat : cargo install bat
 if command -v bat >/dev/null
-    alias c "bat"
-    alias cat "bat"
+    alias cat  "bat"
+    abbr -ag c "cat"
 end
 ### git-delta : diff : cargo install git-delta
 if command -v delta >/dev/null

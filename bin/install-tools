@@ -4,8 +4,13 @@ CARGO_PKGS="
     cargo-update
     bandwhich
     bat
+    bingrep
+    csview
     fd-find
+    hexyl
+    hyperfine
     procs
+    pastel
     ripgrep
     lsd
     git-delta
@@ -13,6 +18,7 @@ CARGO_PKGS="
     du-dust
     choose
     sd
+    tmux-thumbs
 "
 PIP_PKGS="
     python-language-server[all]

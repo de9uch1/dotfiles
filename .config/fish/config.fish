@@ -110,6 +110,8 @@ if command -v pyenv >/dev/null
 end
 
 ## Aliases / Abbreviations
+### df
+alias df       "df -Th"
 ### tmux
 abbr -ag t     "tmux"
 abbr -ag ta    "tmux attach -d"

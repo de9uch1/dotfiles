@@ -110,8 +110,10 @@ if command -v pyenv >/dev/null
 end
 
 ## Aliases / Abbreviations
-### df
+### UNIX commands
 alias df       "df -Th"
+alias free     "free -h"
+abbr -ag se    "ssh -O exit"
 ### tmux
 abbr -ag t     "tmux"
 abbr -ag ta    "tmux attach -d"
@@ -125,6 +127,8 @@ abbr -ag gf    "git fetch"
 abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)"
 ### poetry
 abbr -ag po    "poetry"
+abbr -ag poi   "poetry install"
+abbr -ag pou   "poetry update"
 abbr -ag pos   "poetry shell"
 abbr -ag por   "poetry run"
 abbr -ag popip "poetry run pip"

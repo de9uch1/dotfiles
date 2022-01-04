@@ -19,3 +19,6 @@ set ruler
 set ttyfast
 set wildmenu
 set nocompatible
+
+packadd! dracula
+colorscheme dracula

@@ -18,14 +18,15 @@ link:
 	@rm -rf $(HOME)/$(XDG_CONFIG)/fish
 	@rm -rf $(HOME)/$(XDG_CONFIG)/powerline
 	@rm -rf $(HOME)/$(XDG_CONFIG)/ptpython
+	@rm -rf $(HOME)/.vim
 	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 
 pyenv:
-	@$(HOME)/bin/pyenv-install-latest
+	@$(HOME)/bin/install-pyenv
 
 tools:
-	@$(HOME)/bin/tools-install-latest
+	@$(HOME)/bin/install-tools
 
 clean:
 	$(foreach f,$(DOTFILES),/bin/rm -f $(HOME)/$(f);)

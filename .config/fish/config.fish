@@ -114,6 +114,9 @@ end
 alias df       "df -Th"
 alias free     "free -h"
 abbr -ag se    "ssh -O exit"
+### My functions
+alias get-ncpus "grep processor /proc/cpuinfo | wc -l"
+alias get-ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
 ### tmux
 abbr -ag t     "tmux"
 abbr -ag ta    "tmux attach -d"
@@ -123,6 +126,8 @@ abbr -ag gs    "git status"
 abbr -ag gco   "git checkout"
 abbr -ag gl    "git log"
 abbr -ag grs   "git reset --hard origin/(git branch --show-current)"
+abbr -ag gpl   "git pull"
+abbr -ag gps   "git push"
 abbr -ag gf    "git fetch"
 abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)"
 ### poetry
@@ -133,7 +138,7 @@ abbr -ag pos   "poetry shell"
 abbr -ag por   "poetry run"
 abbr -ag popip "poetry run pip"
 ### ptpython
-abbr -a -g pp    "ptpython"
+abbr -ag pp    "ptpython"
 ### pdf2svg
 function p2sp
     set -l target (basename $argv[1] .pdf)

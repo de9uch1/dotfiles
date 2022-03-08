@@ -13,9 +13,8 @@ font:
 scrolling:
     history: 100000
 
-background_opacity: 0.85
-
 window:
+    opacity: 0.85
     padding:
         x: 12
         y: 0

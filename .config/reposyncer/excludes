@@ -1,6 +1,0 @@
-.git
-__pycache__
-debug
-experiments
-.venv
-poetry.lock

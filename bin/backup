@@ -14,6 +14,8 @@ def parse_args() -> Namespace:
                         help="restore from the backup file")
     parser.add_argument("--quiet", "-q", action="store_true",
                         help="not print the results")
+    parser.add_argument("--dry-run", "-n", action="store_true",
+                        help="just print the results")
     # fmt: on
     return parser.parse_args()
 
@@ -29,13 +31,14 @@ def main(args: Namespace) -> None:
         suffix_len = len(suffix)
         if filename[len(filename) - suffix_len :] == suffix:
             dstname = filename[:-suffix_len]
-            os.rename(filename, dstname)
         else:
             dstname = filename
     else:
         dstname = filename + args.suffix
         if os.path.exists(os.path.abspath(dstname)):
             raise FileExistsError
+
+    if not args.dry_run and filename != dstname:
         os.rename(filename, dstname)
 
     if not args.quiet:

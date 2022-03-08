@@ -35,17 +35,26 @@ if __name__ == "__main__":
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("path", nargs="?", default="./cli.py", help="script path")
+    # fmt: off
+    parser.add_argument("path", nargs="?", default="./cli.py",
+                        help="script path")
+    parser.add_argument("--chmod", "-m", type=int, default=777,
+                        help="specify the permission number of chmod")
+    # fmt: on
     return parser.parse_args()
 
 
 def main(args: Namespace) -> None:
-    assert os.path.exists(os.path.dirname(os.path.abspath(args.path)))
+    path: str = os.path.abspath(args.path)
+    if not os.path.exists(os.path.dirname(path)):
+        raise FileNotFoundError
+    if os.path.exists(path):
+        raise FileExistsError
 
-    with open(args.path, mode="w") as f:
+    with open(path, mode="w") as f:
         f.write(gen_template())
 
-    os.chmod(args.path, 0o777)
+    os.chmod(path, int(f"0o{args.chmod}", base=8))
 
 
 def cli_main():

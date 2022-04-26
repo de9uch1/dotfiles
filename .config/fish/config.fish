@@ -114,9 +114,27 @@ end
 alias df       "df -Th"
 alias free     "free -h"
 abbr -ag se    "ssh -O exit"
+alias parallel "parallel --gnu"
+alias p        "parallel"
+abbr -ag p     "parallel"
 ### My functions
 alias get-ncpus "grep processor /proc/cpuinfo | wc -l"
 alias get-ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
+### My research tools
+#### mlexp
+alias ml    "mlexp"
+alias grun  "mlexp gpu poll"
+alias mlr   "mlexp run"
+alias mlrm  "mlexp rm"
+alias mls   "mlexp list -v"
+alias mll   "mlexp log"
+alias mlsh  "mlexp show"
+abbr -ag mr "mlexp run -- mrun"
+#### nlpack
+alias analyzer        "nlpack analyzer"
+alias corpus-stats    "analyzer corpus-stats"
+alias compare-sysouts "analyzer compare-sysouts"
+alias show-aligns     "analyzer show-aligns"
 ### tmux
 abbr -ag t     "tmux"
 abbr -ag ta    "tmux attach -d"
@@ -161,11 +179,11 @@ if type -q enhancd
 end
 ### lsd : ls : cargo install lsd
 if command -v lsd >/dev/null
-    alias ls     "lsd"
-    abbr -ag l   "ls"
-    abbr -ag ll  "ls -l"
-    abbr -ag la  "ls -a"
-    abbr -ag lla "ls -la"
+    alias ls   "lsd"
+    alias l    "ls"
+    alias ll   "ls -l"
+    alias la   "ls -a"
+    alias lla  "ls -la"
 end
 ### bat : cat : cargo install bat
 if command -v bat >/dev/null

@@ -44,8 +44,16 @@ if [[ $PREFIX_SYSTEM = brew ]] && \
 fi
 
 # Avoid executing fish shell in "dumb" TERM enviroment
-if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]]; then
+if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]] || [[ $- = *c* ]]; then
     LOGIN_SHELL=bash
+fi
+
+# exec wsld
+if command -v wsld > /dev/null; then
+    if ! pgrep wsld >> /dev/null 2>&1; then
+        nohup wsld > /dev/null < /dev/null 2>&1 &
+        disown
+    fi
 fi
 
 # exec fish shell

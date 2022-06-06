@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+# *-* encoding: utf-8 *-*
+
+"""
+Takes a tab-delimited stream on STDIN and writes the columns in turn to the files specified as
+arguments (i.e., the opposite of UNIX `paste`). If there are more fields than files, the last file
+will get all remaining fields. If there are more files than fields, files beyond the last field will
+get blank lines.
+    paste file1 file2 [...] | ./unpaste file1.copy file2.copy [...]
+Author: Matt Post <post@cs.jhu.edu>
+"""
+
+import argparse
+import sys
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    # fmt: off
+    parser.add_argument("--append", "-a", action="store_true", default=False,
+                        help="Append to files instead of overwriting.")
+    parser.add_argument("--tee", "-t", action="store_true", default=False,
+                        help="Also echo to STDOUT")
+    parser.add_argument("--delimiter", "-d", type=str, default="\t",
+                        help="Delimiter to use")
+    parser.add_argument("files", nargs="+",
+                        help="File(s) to write to")
+    # fmt: on
+    return parser.parse_args()
+
+
+def main(args: argparse.Namespace) -> None:
+    def _writeto(filename, append=False):
+        mode = "at" if append else "wt"
+        if filename.endswith(".gz"):
+            import gzip
+
+            return gzip.open(filename, mode)
+        else:
+            return open(filename, mode)
+
+    fhs = list(map(lambda x: _writeto(x, args.append), args.files))
+
+    for line in sys.stdin:
+        line = line.rstrip("\n")
+        fields = line.split(args.delimiter, maxsplit=len(fhs) - 1)
+        for i, field in enumerate(fields):
+            print(field, file=fhs[i], flush=True)
+
+        for i in range(len(fields), len(fhs)):
+            print(file=fhs[i], flush=True)
+
+        if args.tee:
+            print(line, flush=True)
+
+    for fh in fhs:
+        fh.close()
+
+
+def cli_main():
+    args = parse_args()
+    main(args)
+
+
+if __name__ == "__main__":
+    cli_main()

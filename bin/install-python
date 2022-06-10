@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+PYTHON_VERSIONS="3.8 3.9 3.10"
+
+install-pyenv
+
+installed_versions="$(pyenv versions --bare)"
+
+for version in $PYTHON_VERSIONS; do
+    skip=0
+    latest_version=$(pyenv install -l | tr -d ' ' | grep -E "^${version}" | sort -V | tail -1)
+    for current_version in $installed_versions; do
+        if [[ $current_version = $latest_version ]]; then
+            skip=1
+            break
+        fi
+    done
+    if [[ $skip = 0 ]]; then
+        echo "Type [y] to install CPython ${latest_version}."
+        read _enter
+        if [[ $_enter = y ]] || [[ $_enter = Y ]]; then
+            pyenv install "${latest_version}"
+        else
+            echo "Skip ${latest_version}."
+        fi
+    else
+        echo "CPython ${latest_version} is already installed, skip."
+    fi
+done

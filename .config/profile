@@ -78,9 +78,9 @@ add_path \
     $HOME/.local/bin \
     $HOME/local/bin
 ### Prompt: Starship
-if ! command -v starship >/dev/null; then
-    curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
-fi
+# if ! command -v starship >/dev/null; then
+#     curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
+# fi
 
 ## CLI tools
 ### ghq

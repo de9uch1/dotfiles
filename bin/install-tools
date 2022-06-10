@@ -18,13 +18,7 @@ CARGO_PKGS="
     du-dust
     choose
     sd
-    tmux-thumbs
-"
-PIP_PKGS="
-    python-language-server[all]
-    make-runner
-    py-spy
-    trash-cli
+    starship
 "
 
 if command -v cargo; then
@@ -32,9 +26,19 @@ if command -v cargo; then
     cargo install-update -a
 fi
 
-PIP_PATH=$(command -v pip)
-if [ "${PIP_PATH##$HOME}" != "${PIP_PATH}" ]; then
-    pip install -U $PIP_PKGS
+if command -v go; then
+    go install github.com/x-motemen/ghq@latest
+    go install github.com/junegunn/fzf@latest
+fi
+
+if command -v pipx > /dev/null; then
+    if command -v trash > /dev/null; then
+        pipx install trash-cli
+    fi
+    if command -v ptpython > /dev/null; then
+        pipx install ptpython
+    fi
+    pipx upgrade-all
 fi
 
 mkdir -p $HOME/.local/bin/

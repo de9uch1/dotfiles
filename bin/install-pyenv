@@ -8,11 +8,11 @@ else
         git clone "https://github.com/pyenv/pyenv.git" $HOME/.pyenv
     else
         echo "'git' not found, abort."
-        exit -1
+        exit 1
     fi
 fi
 
 if ! command -v pyenv >/dev/null; then
     echo "'pyenv' not found, abort."
-    exit -1
+    exit 1
 fi

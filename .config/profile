@@ -51,6 +51,15 @@ fi
 ### Go
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin
+if ! command -v go > /dev/null; then
+    read -p "==> Do you install Golang? [y/N] " install_go
+    if [[ "$install_go" = "y" ]]; then
+        curl -LO https://get.golang.org/$(uname)/go_installer \
+            && chmod +x go_installer \
+            && ./go_installer \
+            && rm go_installer
+    fi
+fi
 ### Rust
 export CARGO_HOME=$HOME/.cargo
 add_path $CARGO_HOME/bin
@@ -70,6 +79,7 @@ add_path \
     $PYENV_ROOT/bin \
     $PYENV_ROOT/shims \
     $HOME/.poetry/bin
+export PIPX_DEFAULT_PYTHON=$PYENV_ROOT/shims/python
 
 ## My Configurations
 ### PATH

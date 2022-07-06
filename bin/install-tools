@@ -32,11 +32,11 @@ if command -v go; then
 fi
 
 if command -v pipx > /dev/null; then
-    if command -v trash > /dev/null; then
-        pipx install trash-cli
-    fi
-    if command -v ptpython > /dev/null; then
+    if ! command -v ptpython > /dev/null; then
         pipx install ptpython
+    fi
+    if ! command -v trash > /dev/null; then
+        pipx install trash-cli
     fi
     pipx upgrade-all
 fi

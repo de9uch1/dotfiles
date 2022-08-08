@@ -50,6 +50,16 @@ function err
     return 1
 end
 
+function __yank
+    for i in (seq (count $fish_killring))
+        echo $fish_killring[$i]
+    end | fzf --print0 \
+        | read -lz result
+    and commandline -- $result
+    commandline -f repaint
+end
+bind \ey "__yank"
+
 ## Manage Dotfiles
 function dots
     set -l usage "usage: dots [u]"
@@ -118,8 +128,8 @@ alias parallel "parallel --gnu"
 alias p        "parallel"
 abbr -ag p     "parallel"
 ### My functions
-alias get-ncpus "grep processor /proc/cpuinfo | wc -l"
-alias get-ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
+alias ncpus "grep processor /proc/cpuinfo | wc -l"
+alias ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
 ### My research tools
 #### mlexp
 alias ml    "mlexp"

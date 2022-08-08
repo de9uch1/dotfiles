@@ -60,6 +60,16 @@ function __yank
 end
 bind \ey "__yank"
 
+function __ssh
+    set -l hosts_file $HOME/.ssh/hosts
+    [ -f $hosts_file ]; or return
+    fzf --print0 <  \
+        | read -lz result
+    [ -n "$result" ]; and ssh $result
+    commandline -f repaint
+end
+bind \es "__ssh"
+
 ## Manage Dotfiles
 function dots
     set -l usage "usage: dots [u]"

@@ -63,7 +63,7 @@ bind \ey "__yank"
 function __ssh
     set -l hosts_file $HOME/.ssh/hosts
     [ -f $hosts_file ]; or return
-    fzf --print0 <  \
+    fzf --print0 < $hosts_file \
         | read -lz result
     [ -n "$result" ]; and ssh $result
     commandline -f repaint

@@ -48,12 +48,14 @@ if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]] || [[ $- = *c* ]]; then
     LOGIN_SHELL=bash
 fi
 
-# exec wsld
-if command -v wsld > /dev/null; then
-    if ! pgrep wsld >> /dev/null 2>&1; then
-        nohup wsld > /dev/null < /dev/null 2>&1 &
-        disown
-    fi
+# Setup VSOCK X11 connection for WSL
+if [[ -n $WSL_DISTRO_NAME ]] \
+       && ! [[ -S /tmp/.X11-unix/X0 ]] \
+       && command -v socat > /dev/null; then
+    mkdir -p /tmp/.X11-unix
+    chmod -R 777 /tmp/.X11-unix
+    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 > /dev/null < /dev/null 2>&1 &
+    disown
 fi
 
 # exec fish shell

@@ -58,8 +58,8 @@
 # $status\
 # $shell\
 # $character"""
-scan_timeout = 0
-command_timeout = 0
+scan_timeout = 1
+command_timeout = 1
 add_newline = true
 
 [aws]
@@ -251,7 +251,7 @@ style = 'purple '
 truncation_length = 9223372036854775807
 truncation_symbol = '…'
 only_attached = false
-always_show_remote = false
+always_show_remote = true
 disabled = false
 
 [git_commit]

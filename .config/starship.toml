@@ -708,4 +708,6 @@ detect_files = []
 detect_folders = []
 
 [custom]
+[container]
+disabled = true
 

@@ -13,6 +13,7 @@ function add_path() {
 
 ## Enviroment variables
 export LANG=en_US.UTF-8
+export DOTFILES_PATH="$HOME/.dotfiles"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
@@ -60,6 +61,11 @@ if ! command -v go > /dev/null; then
             && rm go_installer
     fi
 fi
+if command -v go > /dev/null && ! [[ -x $DOTFILES_PATH/cmdlogger/cmdlogger ]]; then
+    pushd $DOTFILES_PATH/cmdlogger
+    go build cmdlogger.go
+    popd
+fi
 ### Rust
 export CARGO_HOME=$HOME/.cargo
 add_path $CARGO_HOME/bin
@@ -80,6 +86,7 @@ add_path \
     $PYENV_ROOT/shims \
     $HOME/.poetry/bin
 export PIPX_DEFAULT_PYTHON=$PYENV_ROOT/shims/python
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 ## My Configurations
 ### PATH
@@ -93,6 +100,8 @@ add_path \
 # fi
 
 ## CLI tools
+### emacs
+export LSP_USE_PLISTS=true
 ### ghq
 export GHQ_ROOT=$HOME/src
 export GHQ_SELECTOR=fzf

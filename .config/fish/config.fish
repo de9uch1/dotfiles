@@ -21,6 +21,25 @@ if command -v starship >/dev/null
     starship init fish | source
 end
 
+## History
+set -x CMDLOG_HISTORY_FILE $HOME/.cmdlog_history
+set -x DISABLE_CMDLOG_HISTORY
+set -x CMDLOG_IGNORES cmdlogger pdh pdha pdr
+function __perdir_history_save --on-event fish_preexec
+    cmdlogger -a "$argv"
+end
+function __perdir_history_fzf_reverse_isearch
+    cmdlogger -l \
+        | eval (__fzfcmd) --tiebreak=index --print0 --read0 --toggle-sort=alt-r $FZF_DEFAULT_OPTS $FZF_REVERSE_ISEARCH_OPTS -q '(commandline)' \
+        | read -zl result
+    and commandline -- $result
+    commandline -f repaint
+end
+bind \er '__perdir_history_fzf_reverse_isearch'
+alias pdh  "cmdlogger -u"
+alias pdha "cmdlogger -p"
+alias pdr  "cmdlogger -a"
+
 ## Plugin Manager: Fisher
 set FISHER_INITIALIZED "$FISH_CONFIG_DIR/.fisher"
 if not [ -f $FISHER_INITIALIZED ]

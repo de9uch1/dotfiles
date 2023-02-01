@@ -1,3 +1,5 @@
+cmdlogger/cmdlogger
+.vim/.netrwhist
 .config/fish/functions/
 .config/fish/completions/
 .config/fish/conf.d/

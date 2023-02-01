@@ -1,3 +1,10 @@
+# Python
 poetry.lock
 poetry.toml
+.ptpython_history
+
+# Emacs
 .#*
+
+# Tools
+.mlexp/

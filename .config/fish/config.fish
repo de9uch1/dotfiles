@@ -195,7 +195,7 @@ abbr -ag pos   "poetry shell"
 abbr -ag por   "poetry run"
 abbr -ag popip "poetry run pip"
 ### ptpython
-abbr -ag pp    "ptpython"
+alias pp       "ptpython --history (git root 2>/dev/null; or echo .)/.ptpython_history"
 ### pdf2svg
 function p2sp
     set -l target (basename $argv[1] .pdf)

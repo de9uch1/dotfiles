@@ -153,11 +153,12 @@ end
 alias df       "df -Th"
 alias free     "free -h"
 abbr -ag se    "ssh -O exit"
+alias m        "make"
 alias parallel "parallel --gnu"
 alias p        "parallel"
 abbr -ag p     "parallel"
 ### My functions
-alias ncpus "grep processor /proc/cpuinfo | wc -l"
+alias ncpus "nproc"
 alias ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
 ### My research tools
 #### mlexp

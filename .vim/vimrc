@@ -1,6 +1,11 @@
 set number
 set cin
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 syntax on
+set termguicolors
 filetype on
 set backspace=indent,eol,start
 set encoding=utf-8
@@ -12,7 +17,6 @@ set autoindent
 set autoread
 set expandtab
 set indentkeys=o,O
-set termguicolors
 set hlsearch
 set incsearch
 set ruler

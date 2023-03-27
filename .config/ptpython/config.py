@@ -21,6 +21,8 @@ def configure(repl):
 
     :param repl: `PythonRepl` instance.
     """
+
+    repl.cursor_shape_config = "Blink beam"
     # Show function signature (bool).
     repl.show_signature = True
 

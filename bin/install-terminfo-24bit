@@ -1,2 +1,3 @@
 #!/bin/sh
-tic -x -o ~/.terminfo ~/.config/terminfo-24bit.src
+tic -x -o ~/.terminfo ~/.config/terminfo-xterm-24bits.info
+tic -xe  alacritty,alacritty-direct ~/.config/terminfo-alacritty.info

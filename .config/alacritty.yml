@@ -1,3 +1,8 @@
+env:
+    TERM: alacritty-direct
+    COLORTERM: truecolor
+    WSLENV: TERM:COLORTERM
+
 shell:
     program: bash
 

@@ -49,14 +49,14 @@ if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]] || [[ $- = *c* ]]; then
 fi
 
 # Setup VSOCK X11 connection for WSL
-if [[ -n $WSL_DISTRO_NAME ]] \
-       && ! [[ -S /tmp/.X11-unix/X0 ]] \
-       && command -v socat > /dev/null; then
-    mkdir -p /tmp/.X11-unix
-    chmod -R 777 /tmp/.X11-unix
-    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 > /dev/null < /dev/null 2>&1 &
-    disown
-fi
+#if [[ -n $WSL_DISTRO_NAME ]] \
+#       && ! [[ -S /tmp/.X11-unix/X0 ]] \
+#       && command -v socat > /dev/null; then
+#    mkdir -p /tmp/.X11-unix
+#    chmod -R 777 /tmp/.X11-unix
+#    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 > /dev/null < /dev/null 2>&1 &
+#    disown
+#fi
 
 # exec fish shell
 if FISH_COMMAND=$(command -v fish) && \

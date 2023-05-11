@@ -11,6 +11,15 @@ function add_path() {
     done
 }
 
+function append_path() {
+    while [[ $# -gt 0 ]]; do
+        if [[ ":${PATH}:" != *:"$1":* ]]; then
+            export PATH="${PATH}:${1}"
+        fi
+        shift
+    done
+}
+
 ## Enviroment variables
 export LANG=en_US.UTF-8
 export DOTFILES_PATH="$HOME/.dotfiles"
@@ -98,6 +107,12 @@ add_path \
 # if ! command -v starship >/dev/null; then
 #     curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/.local/bin sh
 # fi
+
+### WSLPATH
+if [[ -n "$WSLPATH" ]]; then
+    export ORIGPATH="$PATH"
+    append_path $(printenv WSLPATH | tr ":" "\n")
+fi
 
 ## CLI tools
 ### emacs

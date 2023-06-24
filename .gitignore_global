@@ -8,3 +8,4 @@ poetry.toml
 
 # Tools
 .mlexp/
+wandb/

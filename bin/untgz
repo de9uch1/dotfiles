@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if command -v pigz >/dev/null; then
+    tar -I pigz -xvf $@
+else
+    tar -xvf $@
+fi

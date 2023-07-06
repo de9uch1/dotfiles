@@ -102,49 +102,100 @@ def parse(args):
             print(f"{name}={shlex.quote(str(v))}")
 
 
-def main():
-    parser = ArgumentParser()
-    subparsers = parser.add_subparsers()
+def usage(args: Namespace):
+    s = """Argument parser for shell script.
 
-    setup_parser = subparsers.add_parser("setup")
+USAGE:
+    1. Define add_args() function and add arguments.
+    2. The first argument of `argparser add` is a variable name in the script which will
+       be set to the given argument value.
+    3. Other arguments of `argparser add` can be shown by `argparser add --help`.
+    4. `eval $(add_args | argparser parse $@)` parses command line arguments.
+
+EAMPLE:
+    --------------------------------------------------------
+    #!/bin/bash
+
+    function add_args() {
+        argparser setup $0 "Test script."
+        argparser add FILE        file
+        argparser add WORKERS  -l num-workers  -s n --type int --default 8
+        argparser add BETA     -l experimental      --action store_true
+        argparser add USER_IDS -l user-ids     -s u --type int --nargs "*"
+        argparser add LANGUAGE -l lang              --choices en de ja
+    }
+
+    eval $(add_args | argparser parse $@)
+    --------------------------------------------------------
+
+    If the above script is executed with this following command line,
+        ./test.sh --file log.txt --num-workers 16 --experimental -u 100 200 --lang ja
+
+    The variables in the script will be set to:
+        - FILE=log.txt
+        - WORKERS=16
+        - BETA=true           # This is helpful for such situation: `if $BETA; then ...`
+        - USER_IDS=(100 200)  # Stored in array
+        - LANGUAGE=ja
+
+    You can also see the help messages by `./test.sh --help`.
+"""
+    print(s)
+
+
+def main():
+    parser = ArgumentParser(description="Argument parser for shell script.")
+    subparsers = parser.add_subparsers()
+    help_parser = subparsers.add_parser("help", help="Show usage.")
+    help_parser.set_defaults(func=usage)
+
+    setup_parser = subparsers.add_parser(
+        "setup", help="Setup a header and footer of the help message."
+    )
     # fmt: off
     setup_parser.add_argument("prog", type=str, nargs="?",
-                            help="Program name.")
+                            help="Program name. Usually $0 should be given.")
     setup_parser.add_argument("desc", type=str, nargs="?",
                             help="Description.")
     setup_parser.add_argument("epilog", type=str, nargs="?",
                             help="Epilog.")
     # fmt: on
-    setup_parser.set_defaults(func=setup)
 
-    add_parser = subparsers.add_parser("add")
+    add_parser = subparsers.add_parser("add", help="Define arguments.")
     # fmt: off
     add_parser.add_argument("varname", type=str,
                             help="Variable name.")
     add_parser.add_argument("--long", "-l", type=str,
-                            help="Long option.")
+                            help="Long option without prefix hyphens.")
     add_parser.add_argument("--short", "-s", type=str,
-                            help="Short option.")
+                            help="Short option without a prefix hyphen.")
     add_parser.add_argument("position", nargs="?", type=str,
-                            help="Position option.")
+                            help="Positional argument.")
     add_parser.add_argument("--desc", type=str,
                             help="Help message.")
-    add_parser.add_argument("--type", type=str,
-                            help="Type.")
+    add_parser.add_argument("--type", "-t", type=str,
+                            help="Type of an argument.")
     add_parser.add_argument("--default", type=str,
                             help="Default value.")
     add_parser.add_argument("--action", type=str,
                             help="Action.")
     add_parser.add_argument("--nargs", type=str,
-                            help="nargs.")
+                            help="Number of arguments. *, ?, and + can be specified.")
     add_parser.add_argument("--required", action="store_true",
-                            help="Set an option as required.")
+                            help="Set the option as required.")
     add_parser.add_argument("--choices", nargs="+",
                             help="Choice from a restricted set of values.")
     # fmt: on
     add_parser.set_defaults(func=add)
 
-    parse_parser = subparsers.add_parser("parse", add_help=False)
+    parse_parser = subparsers.add_parser(
+        "parse",
+        add_help=False,
+        help="Parse command line arguments. "
+        "This subcommand is only called by `eval $(add_args | argparser parse $@)` "
+        "in a shell script with a defined `add_args()` function. "
+        "See an example by `argparser help`.",
+    )
     parse_parser.set_defaults(func=parse)
     args, _ = parser.parse_known_args()
     args.func(args)

@@ -96,6 +96,8 @@ def parse(args):
         elif isinstance(v, list):
             v_str = shlex.join(map(str, v))
             print(f"{name}=({v_str})")
+        elif isinstance(v, bool):
+            print(f"{name}={str(v).lower()}")
         else:
             print(f"{name}={shlex.quote(str(v))}")
 

@@ -157,6 +157,9 @@ alias m        "make"
 alias parallel "parallel --gnu"
 alias p        "parallel"
 abbr -ag p     "parallel"
+if command -v pigz >/dev/null
+    alias gzip "pigz"
+end
 ### My functions
 alias ncpus "nproc"
 alias ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"

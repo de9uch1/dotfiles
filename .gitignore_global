@@ -4,7 +4,8 @@ poetry.toml
 .ptpython_history
 
 # Emacs
-.#*
+.\#*
+.dir-locals.el
 
 # Tools
 .mlexp/

@@ -2,13 +2,36 @@
 
 import os
 from argparse import ArgumentParser, Namespace
+from typing import List
+
+
+def backup(filename: str, suffix: str, restore: bool, quiet: bool, dry_run: bool):
+    if not os.path.exists(filename):
+        raise FileNotFoundError
+
+    if restore:
+        suffix_len = len(suffix)
+        if filename[len(filename) - suffix_len :] == suffix:
+            dstname = filename[:-suffix_len]
+        else:
+            dstname = filename
+    else:
+        dstname = filename + suffix
+        if os.path.exists(os.path.abspath(dstname)):
+            raise FileExistsError
+
+    if not dry_run and filename != dstname:
+        os.rename(filename, dstname)
+
+    if not quiet:
+        print(f"{filename} -> {dstname}")
 
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
     # fmt: off
-    parser.add_argument("file", help="file name")
-    parser.add_argument("suffix", default=".bak", nargs="?",
+    parser.add_argument("files", nargs="+", help="file name")
+    parser.add_argument("--suffix", "-s", default=".bak", nargs="?",
                         help="suffix of the backup file")
     parser.add_argument("--restore", "-r", action="store_true",
                         help="restore from the backup file")
@@ -21,28 +44,11 @@ def parse_args() -> Namespace:
 
 
 def main(args: Namespace) -> None:
-    filename: str = args.file
+    files: List[str] = args.files
     suffix: str = args.suffix
 
-    if not os.path.exists(filename):
-        raise FileNotFoundError
-
-    if args.restore:
-        suffix_len = len(suffix)
-        if filename[len(filename) - suffix_len :] == suffix:
-            dstname = filename[:-suffix_len]
-        else:
-            dstname = filename
-    else:
-        dstname = filename + args.suffix
-        if os.path.exists(os.path.abspath(dstname)):
-            raise FileExistsError
-
-    if not args.dry_run and filename != dstname:
-        os.rename(filename, dstname)
-
-    if not args.quiet:
-        print(f"{filename} -> {dstname}")
+    for file in files:
+        backup(file, suffix, args.restore, args.quiet, args.dry_run)
 
 
 def cli_main():

@@ -7,7 +7,8 @@ Description=Pueue Daemon - CLI process scheduler and manager
 
 [Service]
 Restart=no
-ExecStart=/usr/bin/bash -c 'exec $HOME/.cargo/bin/pueued'
+ExecStart=/bin/bash -c 'exec $HOME/.cargo/bin/pueued'
+#ConditionHost=
 
 [Install]
 WantedBy=default.target

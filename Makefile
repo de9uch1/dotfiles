@@ -23,6 +23,7 @@ link:
 	@rm -rf $(HOME)/$(XDG_CONFIG)/powerline
 	@rm -rf $(HOME)/$(XDG_CONFIG)/ptpython
 	@rm -rf $(HOME)/$(XDG_CONFIG)/wezterm
+	@rm -rf $(HOME)/$(XDG_CONFIG)/systemd
 	@rm -rf $(HOME)/.vim
 	@mkdir -p $(HOME)/bin
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)

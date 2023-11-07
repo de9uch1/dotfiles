@@ -17,7 +17,7 @@ def parse_args() -> Namespace:
 
 def main(args: Namespace) -> None:
     cast_type = eval(args.type) if args.type else eval
-    d = [cast_type(l.strip()) for l in sys.stdin]
+    d = [cast_type(l.strip().replace(",", "")) for l in sys.stdin]
     res = sum(d) / len(d)
     if args.fmt:
         print(f"{res:{args.fmt}}")

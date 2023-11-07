@@ -118,7 +118,7 @@ add_path \
 ### emacs
 export LSP_USE_PLISTS=true
 ### ghq
-export GHQ_ROOT=$HOME/src
+export GHQ_ROOT=${GHQ_ROOT:-$HOME/src}
 export GHQ_SELECTOR=fzf
 ### fzf
 export FZF_DEFAULT_OPTS="--height 30% --layout reverse --border --color 16"

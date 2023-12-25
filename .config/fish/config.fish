@@ -250,6 +250,11 @@ if command -v dust >/dev/null
     abbr -ag du1 "du -d 1"
     abbr -ag du2 "du -d 2"
 end
+### csview : : cargo install csview
+if command -v csview >/dev/null
+    alias tsview "command csview -t -s Rounded"
+    alias csview "command csview -s Rounded"
+end
 
 ## Emacs
 ### vterm

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eu
+
+IN_FILE="$1"
+OUT_FILE="$(basename $IN_FILE .emf).pdf"
+echo "'$IN_FILE' -> '$OUT_FILE'"
+inkscape -TD --export-filename="$OUT_FILE" "$IN_FILE"

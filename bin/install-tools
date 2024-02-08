@@ -48,3 +48,4 @@ curl \
     -o $HOME/.local/bin/git-rsync \
     https://raw.githubusercontent.com/de9uch1/git-rsync/master/git-rsync
 chmod +x $HOME/.local/bin/git-rsync
+curl -sfL https://direnv.net/install.sh | env bin_path=$HOME/.local/bin bash

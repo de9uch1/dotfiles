@@ -255,6 +255,10 @@ if command -v csview >/dev/null
     alias tsview "command csview -t -s Rounded"
     alias csview "command csview -s Rounded"
 end
+## direnv
+if command -v direnv >/dev/null
+    direnv hook fish | source
+end
 
 ## Emacs
 ### vterm

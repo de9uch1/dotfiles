@@ -10,3 +10,4 @@ poetry.toml
 # Tools
 .mlexp/
 wandb/
+.envrc

@@ -30,6 +30,7 @@ fi
 if command -v go; then
     go install github.com/x-motemen/ghq@latest
     go install github.com/junegunn/fzf@latest
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest
 fi
 
 if command -v pipx > /dev/null; then

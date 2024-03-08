@@ -3,7 +3,7 @@
 DOTFILES_PATH=$HOME/.dotfiles
 SRC_URI_GIT_SSH="git@github.com:de9uch1/dotfiles.git"
 SRC_URI_GIT_HTTP="https://github.com/de9uch1/dotfiles.git"
-SRC_URI_TARBALL="https://github.com/de9uch1/dotfiles/archive/master.tar.gz"
+SRC_URI_TARBALL="https://github.com/de9uch1/dotfiles/archive/main.tar.gz"
 
 MAKE=""
 case $(uname) in
@@ -29,19 +29,19 @@ get_git_repo() {
     fi
 }
 
-get_master_archive() {
+get_main_archive() {
     if command -v curl >/dev/null; then
         curl -L $SRC_URI_TARBALL
     elif command -v wget >/dev/null; then
         wget -O - $SRC_URI_TARBALL
     fi | tar xzv
-    mv dotfiles-master $DOTFILES_PATH
+    mv dotfiles-main $DOTFILES_PATH
 }
 
 if command -v git >/dev/null; then
     get_git_repo
 else
-    get_master_archive
+    get_main_archive
 fi
 
 cd $DOTFILES_PATH

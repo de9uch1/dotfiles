@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -sSf https://rye-up.com/get | bash
+rye self completion -s fish > ~/.config/fish/completions/rye.fish

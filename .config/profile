@@ -131,6 +131,8 @@ export FILTER="fzf $FZF_DEFAULT_OPTS"
 export SKIM_DEFAULT_OPTIONS="--height 30% --layout reverse-list"
 ### trash-cli
 export TRASH_DISABLED=${TRASH_DISABLED:-0}
+### tqdm
+export TQDM_DYNAMIC_NCOLS=True
 
 ## Set the signature
 export LOADED_PROFILE=${BASH_SOURCE:-$0}

@@ -198,6 +198,8 @@ abbr -ag pou   "poetry update"
 abbr -ag pos   "poetry shell"
 abbr -ag por   "poetry run"
 abbr -ag popip "poetry run pip"
+### rye
+alias pys      "fish -il --init-command='source (rye show | grep \'^venv: \' | sed -e \'s/^venv: //g\')/bin/activate.fish'"
 ### ptpython
 alias pp       "ptpython --history (git root 2>/dev/null; or echo .)/.ptpython_history"
 ### pdf2svg

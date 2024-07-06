@@ -4,6 +4,7 @@ TOOLS="
     gotop
     pandoc
     trans
+    emacs_lsp_booster
 "
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
@@ -139,6 +140,31 @@ function _trans() {
     curl -sLO "$src_uri"
     chmod +x $pkg_bin
     ln -sf $pkg_bin $BIN_DIR/trans
+}
+
+function _emacs_lsp_booster() {
+    local _CPU_TYPE=$(cpu_type)
+    local pkg_name="emacs-lsp-booster"
+    local repository="https://github.com/blahgeek/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" | \
+                        grep -Eo "tag/v[0-9\.]+" | \
+                        uniq | \
+                        cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if exists $pkg_bin; then
+        return
+    fi
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    mkdir -p $pkg_dir
+    cd $pkg_dir
+    wget -q "$src_uri"
+    unzip -q ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
+    rm -f ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
 }
 
 ### run this script

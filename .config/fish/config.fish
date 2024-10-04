@@ -199,7 +199,20 @@ abbr -ag pos   "poetry shell"
 abbr -ag por   "poetry run"
 abbr -ag popip "poetry run pip"
 ### rye
-alias pys      "fish -il --init-command='source (rye show | grep \'^venv: \' | sed -e \'s/^venv: //g\')/bin/activate.fish'"
+# alias pys      "fish -il --init-command='source (rye show | grep \'^venv: \' | sed -e \'s/^venv: //g\')/bin/activate.fish'"
+function pys
+    set -l curdir (pwd)
+    set -l prevdir ""
+    while [ "$curdir" != "$prevdir" ]; and [ "$curdir" != "/" ]
+        if [ -d "$curdir/.venv" ]
+            fish -il --init-command="source '$curdir/.venv/bin/activate.fish'"
+            break
+        end
+        set prevdir "$curdir"
+        set curdir (realpath "$curdir/../")
+    end
+end
+
 ### ptpython
 alias pp       "ptpython --history (git root 2>/dev/null; or echo .)/.ptpython_history"
 ### pdf2svg

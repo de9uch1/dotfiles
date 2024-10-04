@@ -17,21 +17,14 @@ Modifier: Hiroyuki Deguchi <deguchi.hiroyuki.db0@is.naist.jp>
 """
 
 import argparse
-import gzip
+import mmap
 import sys
-from io import TextIOWrapper
-from itertools import zip_longest
-from typing import TextIO, Union
+from io import BufferedReader
 
 
-def smart_read(filename: str) -> Union[TextIO, TextIOWrapper]:
+def smart_read(filename: str) -> BufferedReader:
     try:
-        if filename == "-":
-            return sys.stdin
-        elif filename.endswith(".gz"):
-            return gzip.open(filename, mode="rt", encoding="utf-8")
-        else:
-            return open(filename, mode="rt", encoding="utf-8")
+        return open(filename, mode="r+b")
     except FileNotFoundError:
         print("Can't find file: {}".format(filename))
         sys.exit(1)
@@ -47,20 +40,11 @@ def parse_args() -> argparse.Namespace:
         help="Display head-style file headers if there is more than one file",
     )
     parser.add_argument(
-        "--zero-indexed",
-        "-0",
-        default=False,
-        action="store_true",
-        help="The line number is treated as zero-indexed",
-    )
-    parser.add_argument(
         "lines", help="The line number (N) or range (M-N or M:N) to display"
     )
     parser.add_argument(
-        "files",
-        nargs="*",
+        "file",
         type=smart_read,
-        default=[sys.stdin],
         help="The files to work with",
     )
     return parser.parse_args()
@@ -76,20 +60,16 @@ def main(args: argparse.Namespace) -> None:
         start = int(args.lines)
         stop = int(args.lines)
 
-    for i, lines in enumerate(zip_longest(*args.files), 0 if args.zero_indexed else 1):
-        if i < start:
-            continue
-        if i > stop:
-            break
+    mmap_file = mmap.mmap(args.file.fileno(), 0)
 
-        for j, line in enumerate(lines):
-            if line is not None:
-                if args.verbose:
-                    print(
-                        "=== {}".format(args.files[j].name), line.rstrip(), "", sep="\n"
-                    )
-                else:
-                    print(line.rstrip())
+    n = 0
+    offset = 0
+    for i, byte in enumerate(mmap_file):
+        if byte == b"\n":
+            n += 1
+            if start <= n <= stop:
+                print(mmap_file[offset:i].decode("utf-8").rstrip())
+            offset = i + 1
 
 
 def cli_main() -> None:

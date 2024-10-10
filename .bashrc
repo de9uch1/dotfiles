@@ -14,7 +14,8 @@ fi
 export KERNEL_TYPE=$(uname)
 export CPU_TYPE=$(uname -m)
 
-### Gentoo system
+# Prefix
+## Gentoo system
 if [[ $PREFIX_SYSTEM = gentoo ]] && \
        [[ -d $HOME/gentoo ]] && \
        [[ $CPU_TYPE = x86_64 ]]; then
@@ -30,7 +31,7 @@ if [[ -n $EPREFIX ]] && \
     fi
 fi
 
-### linuxbrew
+## linuxbrew
 if [[ $PREFIX_SYSTEM = brew ]] && \
        [[ -d $HOME/.linuxbrew ]] && \
        [[ $CPU_TYPE = x86_64 ]]; then

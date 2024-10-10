@@ -61,15 +61,16 @@ fi
 ### Go
 export GOPATH=$HOME/.go
 add_path $GOPATH/bin
-if ! command -v go > /dev/null; then
-    read -p "==> Do you install Golang? [y/N] " install_go
-    if [[ "$install_go" = "y" ]]; then
-        curl -LO https://get.golang.org/$(uname)/go_installer \
-            && chmod +x go_installer \
-            && ./go_installer \
-            && rm go_installer
-    fi
-fi
+#### go_installer is deprecated.
+# if ! command -v go > /dev/null; then
+#     read -p "==> Do you install Golang? [y/N] " install_go
+#     if [[ "$install_go" = "y" ]]; then
+#         curl -LO https://get.golang.org/$(uname)/go_installer \
+#             && chmod +x go_installer \
+#             && ./go_installer \
+#             && rm go_installer
+#     fi
+# fi
 if command -v go > /dev/null && ! [[ -x $DOTFILES_PATH/cmdlogger/cmdlogger ]]; then
     pushd $DOTFILES_PATH/cmdlogger
     go build cmdlogger.go

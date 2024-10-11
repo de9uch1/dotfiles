@@ -163,6 +163,28 @@ end
 ### My functions
 alias ncpus "nproc"
 alias ngpus "nvidia-smi --query-gpu=index --format=csv,noheader,nounits | wc -l"
+function sproxy
+    switch $argv[1]
+        case 1
+            if [ -z "$PROXY_SERVER" ]
+                return
+            end
+            export http_proxy=$PROXY_SERVER
+            export https_proxy=$PROXY_SERVER
+            export ftp_proxy=$PROXY_SERVER
+            export HTTP_PROXY=$PROXY_SERVER
+            export HTTPS_PROXY=$PROXY_SERVER
+            export FTP_PROXY=$PROXY_SERVER
+            if [ -n "$PROXY_POST_ON_HOOK" ]; and command -v $PROXY_POST_ON_HOOK >/dev/null
+                $PROXY_POST_ON_HOOK
+            end
+        case 0
+            for v in http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY
+                set -e -g $v
+            end
+    end
+end
+
 ### My research tools
 #### mlexp
 alias ml    "mlexp"

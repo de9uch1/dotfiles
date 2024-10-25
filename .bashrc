@@ -17,9 +17,9 @@ export CPU_TYPE=$(uname -m)
 # Prefix
 ## Gentoo system
 if [[ $PREFIX_SYSTEM = gentoo ]] && \
-       [[ -d $HOME/gentoo ]] && \
+       [[ -d "${EPREFIX:-$HOME/gentoo}" ]] && \
        [[ $CPU_TYPE = x86_64 ]]; then
-    export EPREFIX=$(realpath $HOME/gentoo)
+    export EPREFIX="${EPREFIX:-$HOME/gentoo}"
 fi
 if [[ -n $EPREFIX ]] && \
        [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
@@ -95,7 +95,7 @@ if command -v pyenv >/dev/null; then
     function pyenv() {
         local command
         command="${1:-}"
-        if [ "$#" -gt 0 ]; then
+        if [[ "$#" -gt 0 ]]; then
             shift
         fi
 

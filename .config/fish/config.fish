@@ -146,6 +146,21 @@ if command -v pyenv >/dev/null
                 command pyenv "$command" $argv
         end
     end
+
+    # pyenv-virtualenv
+    if status --is-interactive
+        add_path "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
+        set -gx PYENV_VIRTUALENV_INIT 1
+        function _pyenv_virtualenv_hook --on-event fish_prompt
+            set -l ret $status
+            if [ -n "$VIRTUAL_ENV" ]
+                pyenv activate --quiet 2>/dev/null; or pyenv deactivate --quiet 2>/dev/null; or true
+            else
+                pyenv activate --quiet 2>/dev/null; or true
+            end
+            return $ret
+        end
+    end
 end
 
 ## Aliases / Abbreviations

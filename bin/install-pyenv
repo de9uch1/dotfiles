@@ -1,18 +1,27 @@
 #!/usr/bin/env bash
 
-if [[ -d $HOME/.pyenv ]]; then
-    cd $HOME/.pyenv
-    git pull
-else
+function gitx() {
     if command -v git >/dev/null; then
-        git clone "https://github.com/pyenv/pyenv.git" $HOME/.pyenv
+        git "$@"
     else
         echo "'git' not found, abort."
         exit 1
     fi
+}
+
+if [[ -d $HOME/.pyenv ]]; then
+    cd $HOME/.pyenv
+    gitx pull
+else
+    gitx clone "https://github.com/pyenv/pyenv.git" $HOME/.pyenv
 fi
 
 if ! command -v pyenv >/dev/null; then
     echo "'pyenv' not found, abort."
     exit 1
+fi
+
+# pyenv-virtualenv
+if ! [[ -d "$(pyenv root)/plugins/pyenv-virtualenv" ]]; then
+    gitx clone "https://github.com/pyenv/pyenv-virtualenv.git" $(pyenv root)/plugins/pyenv-virtualenv
 fi

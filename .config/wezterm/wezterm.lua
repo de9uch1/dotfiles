@@ -27,6 +27,14 @@ config.window_close_confirmation = 'NeverPrompt'
 
 config.front_end = "WebGpu"
 
+config.keys = {
+  {
+    key = 'F11',
+    mods = 'SHIFT',
+    action = wezterm.action.ToggleFullScreen,
+  },
+}
+
 if windows then
    config.default_domain = 'WSL:Gentoo'
    -- config.default_gui_startup_args = { 'ssh', 'localhost' }

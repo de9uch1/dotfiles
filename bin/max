@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import sys
+from argparse import ArgumentParser, Namespace
+
+
+def parse_args() -> Namespace:
+    parser = ArgumentParser()
+    # fmt: off
+    parser.add_argument("--type", "-t", default=None,
+                        help="Cast numbers to the specified type.")
+    parser.add_argument("--fmt", "-f", default=None,
+                        help="Format the result.")
+    # fmt: on
+    return parser.parse_args()
+
+
+def main(args: Namespace) -> None:
+    cast_type = eval(args.type) if args.type else eval
+    d = [cast_type(l.strip().replace(",", "")) for l in sys.stdin]
+    res = max(d)
+    if args.fmt:
+        print(f"{res:{args.fmt}}")
+    else:
+        print(f"{res}")
+
+
+def cli_main():
+    args = parse_args()
+    main(args)
+
+
+if __name__ == "__main__":
+    cli_main()

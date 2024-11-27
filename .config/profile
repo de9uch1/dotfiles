@@ -90,16 +90,17 @@ fi
 #     add_path $(ruby -e 'puts Gem.user_dir')/bin
 # fi
 ### Python
-export PYENV_ROOT=$HOME/.pyenv
-add_path \
-    $PYENV_ROOT/bin \
-    $PYENV_ROOT/shims \
-    $HOME/.poetry/bin
-export PIPX_DEFAULT_PYTHON=$PYENV_ROOT/shims/python
+# export PYENV_ROOT=$HOME/.pyenv
+# add_path \
+#     $PYENV_ROOT/bin \
+#     $PYENV_ROOT/shims \
+#     $HOME/.poetry/bin
+# export PIPX_DEFAULT_PYTHON=$PYENV_ROOT/shims/python
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 # export RYE_HOME=$HOME/.rye
 # add_path $RYE_HOME/shims
 # export PIPX_DEFAULT_PYTHON=$RYE_HOME/shims/python
+add_path $HOME/.local/share/uv/tools/pip/bin
 
 ## My Configurations
 ### PATH

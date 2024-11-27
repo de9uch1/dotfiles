@@ -132,36 +132,36 @@ end
 
 ## Python
 ### pyenv
-if command -v pyenv >/dev/null
-    set -gx PYENV_SHELL fish
-    source "$PYENV_ROOT/libexec/../completions/pyenv.fish"
-    command pyenv rehash 2>/dev/null
-    function pyenv
-        set command $argv[1]
-        set -e argv[1]
-        switch "$command"
-            case rehash shell
-                  source (pyenv "sh-$command" $argv|psub)
-            case '*'
-                command pyenv "$command" $argv
-        end
-    end
+# if command -v pyenv >/dev/null
+#     set -gx PYENV_SHELL fish
+#     source "$PYENV_ROOT/libexec/../completions/pyenv.fish"
+#     command pyenv rehash 2>/dev/null
+#     function pyenv
+#         set command $argv[1]
+#         set -e argv[1]
+#         switch "$command"
+#             case rehash shell
+#                   source (pyenv "sh-$command" $argv|psub)
+#             case '*'
+#                 command pyenv "$command" $argv
+#         end
+#     end
 
-    # pyenv-virtualenv
-    if status --is-interactive
-        add_path "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
-        set -gx PYENV_VIRTUALENV_INIT 1
-        function _pyenv_virtualenv_hook --on-event fish_prompt
-            set -l ret $status
-            if [ -n "$VIRTUAL_ENV" ]
-                pyenv activate --quiet 2>/dev/null; or pyenv deactivate --quiet 2>/dev/null; or true
-            else
-                pyenv activate --quiet 2>/dev/null; or true
-            end
-            return $ret
-        end
-    end
-end
+#     # pyenv-virtualenv
+#     if status --is-interactive
+#         add_path "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
+#         set -gx PYENV_VIRTUALENV_INIT 1
+#         function _pyenv_virtualenv_hook --on-event fish_prompt
+#             set -l ret $status
+#             if [ -n "$VIRTUAL_ENV" ]
+#                 pyenv activate --quiet 2>/dev/null; or pyenv deactivate --quiet 2>/dev/null; or true
+#             else
+#                 pyenv activate --quiet 2>/dev/null; or true
+#             end
+#             return $ret
+#         end
+#     end
+# end
 
 ## Aliases / Abbreviations
 ### UNIX commands
@@ -229,12 +229,12 @@ abbr -ag gps   "git push"
 abbr -ag gf    "git fetch"
 abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)"
 ### poetry
-abbr -ag po    "poetry"
-abbr -ag poi   "poetry install"
-abbr -ag pou   "poetry update"
-abbr -ag pos   "poetry shell"
-abbr -ag por   "poetry run"
-abbr -ag popip "poetry run pip"
+# abbr -ag po    "poetry"
+# abbr -ag poi   "poetry install"
+# abbr -ag pou   "poetry update"
+# abbr -ag pos   "poetry shell"
+# abbr -ag por   "poetry run"
+# abbr -ag popip "poetry run pip"
 ### rye
 # alias pys      "fish -il --init-command='source (rye show | grep \'^venv: \' | sed -e \'s/^venv: //g\')/bin/activate.fish'"
 function pys

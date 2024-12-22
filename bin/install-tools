@@ -33,14 +33,11 @@ if command -v go; then
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 fi
 
-if command -v pipx > /dev/null; then
-    if ! command -v ptpython > /dev/null; then
-        pipx install ptpython
-    fi
+if command -v uv > /dev/null; then
     if ! command -v trash > /dev/null; then
-        pipx install trash-cli
+        uv tool install trash-cli
     fi
-    pipx upgrade-all
+    uv tool upgrade --all
 fi
 
 mkdir -p $HOME/.local/bin/

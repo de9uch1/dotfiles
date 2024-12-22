@@ -40,6 +40,9 @@ if command -v uv > /dev/null; then
     if ! command -v basedpyright > /dev/null; then
         uv tool install basedpyright
     fi
+    if ! command -v ruff > /dev/null; then
+        uv tool install ruff
+    fi
     uv tool upgrade --all
 fi
 

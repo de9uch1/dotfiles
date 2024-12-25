@@ -235,9 +235,14 @@ abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)
 # abbr -ag pos   "poetry shell"
 # abbr -ag por   "poetry run"
 # abbr -ag popip "poetry run pip"
-### rye
-# alias pys      "fish -il --init-command='source (rye show | grep \'^venv: \' | sed -e \'s/^venv: //g\')/bin/activate.fish'"
-function pys
+### uv
+alias up "uv pip"
+alias upi "uv pip install"
+alias upu "uv pip uninstall"
+alias ui "uv sync"
+alias ue "uv venv"
+alias upy "uv python"
+function us
     set -l curdir (pwd)
     set -l prevdir ""
     while [ "$curdir" != "$prevdir" ]; and [ "$curdir" != "/" ]

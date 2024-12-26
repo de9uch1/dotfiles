@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+import sys
+from argparse import ArgumentParser, Namespace
+
+
+def parse_args() -> Namespace:
+    parser = ArgumentParser()
+    # fmt: off
+    parser.add_argument("--type", "-t", default=None,
+                        help="Cast numbers to the specified type.")
+    parser.add_argument("--fmt", "-f", default=None,
+                        help="Format the result.")
+    parser.add_argument("operand",
+                        help="Operand to be multiplied.")
+    # fmt: on
+    return parser.parse_args()
+
+
+def main(args: Namespace) -> None:
+    cast_type = eval(args.type) if args.type else eval
+    x = cast_type(args.operand)
+    for line in sys.stdin:
+        res = cast_type(line.strip().replace(",", "")) * x
+        if args.fmt:
+            print(f"{res:{args.fmt}}")
+        else:
+            print(f"{res}")
+
+
+def cli_main():
+    args = parse_args()
+    main(args)
+
+
+if __name__ == "__main__":
+    cli_main()

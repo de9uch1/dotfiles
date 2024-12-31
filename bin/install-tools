@@ -18,12 +18,16 @@ CARGO_PKGS="
     du-dust
     choose
     sd
-    starship
     pueue
+"
+CARGO_LOCKED_PKGS="
+    starship
+    difftastic
 "
 
 if command -v cargo; then
     cargo install $CARGO_PKGS
+    cargo install --locked $CARGO_LOCKED_PKGS
     cargo install-update -a
 fi
 
@@ -42,6 +46,9 @@ if command -v uv > /dev/null; then
     fi
     if ! command -v ruff > /dev/null; then
         uv tool install ruff
+    fi
+    if ! command -v pip > /dev/null; then
+        uv tool install pip
     fi
     uv tool upgrade --all
 fi

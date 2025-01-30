@@ -2,6 +2,8 @@
 
 CARGO_PKGS="
     cargo-update
+    cargo-edit
+    rust-script
     bandwhich
     bat
     bingrep
@@ -24,6 +26,12 @@ CARGO_LOCKED_PKGS="
     starship
     difftastic
 "
+
+if command -v rustup; then
+    rustup self update
+    rustup component add rustfmt clippy rust-analyzer rust-src
+    rustup update
+fi
 
 if command -v cargo; then
     cargo install $CARGO_PKGS

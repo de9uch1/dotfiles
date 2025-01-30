@@ -84,7 +84,9 @@ if ! [[ -d $CARGO_HOME ]]; then
     if [[ "$install_rust" = "y" ]]; then
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
     fi
+    rustup target add x86_64-unknown-linux-musl
 fi
+
 ### Ruby
 # if command -v ruby >/dev/null; then
 #     add_path $(ruby -e 'puts Gem.user_dir')/bin

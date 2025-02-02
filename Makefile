@@ -21,8 +21,10 @@ list:
 build:
 ifdef IS_LINUX
 	@cd src/mid && cargo build --release --target=x86_64-unknown-linux-musl
+	@cd src/cmdlogger && cargo build --release --target=x86_64-unknown-linux-musl
 else
 	@cd src/mid && cargo build --release
+	@cd src/cmdlogger && cargo build --release
 endif
 
 link:
@@ -39,8 +41,10 @@ link:
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 ifdef IS_LINUX
 	@ln -sfnv $(abspath src/mid/target/x86_64-unknown-linux-musl/release/mid) $(HOME)/bin/mid
+	@ln -sfnv $(abspath src/cmdlogger/target/x86_64-unknown-linux-musl/release/cmdlogger) $(HOME)/bin/cmdlogger
 else
 	@ln -sfnv $(abspath src/mid/target/release/mid) $(HOME)/bin/mid
+	@ln -sfnv $(abspath src/mid/target/release/cmdlogger) $(HOME)/bin/cmdlogger
 endif
 ifdef WSLENV
 	cp -L $(HOME)/$(XDG_CONFIG)/wezterm/wezterm.lua $(WINHOME)/.wezterm.lua

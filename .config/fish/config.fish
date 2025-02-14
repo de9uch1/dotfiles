@@ -171,7 +171,8 @@ abbr -ag se    "ssh -O exit"
 alias m        "make"
 alias parallel "parallel --gnu"
 alias p        "parallel"
-abbr -ag p     "parallel"
+alias pk       "parallel -k"
+alias pkn      "parallel -k --dry-run"
 if command -v pigz >/dev/null
     alias gzip "pigz"
 end

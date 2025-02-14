@@ -77,9 +77,8 @@ fn lookup_records(records: impl Iterator<Item = Result<Record, serde_json::Error
         .expect("Cannot parse the JSON object.");
 
     for record in records.iter().rev() {
-        let cmd = record.cmd.replace("\n", "\\n");
-        if seen.insert(cmd.clone()) {
-            print!("{}{}", cmd, '\0');
+        if seen.insert(record.cmd.clone()) {
+            print!("{}{}", record.cmd, '\0');
         }
     }
 }

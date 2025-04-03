@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SRC_DIR=$(ghq root)
+for repo in $(ghq list); do
+    pushd "$SRC_DIR/$repo" > /dev/null
+    if [[ -n "$(git status -s)" ]]; then
+        echo "$repo"
+    fi
+done

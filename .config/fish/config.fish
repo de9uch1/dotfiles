@@ -306,7 +306,7 @@ else
 end
 ### du-dust : du : cargo install du-dust
 if command -v dust >/dev/null
-    alias du     "dust --terminal_width 80"
+    alias du     "dust --terminal-width 80"
     abbr -ag du1 "du -d 1"
     abbr -ag du2 "du -d 2"
 end

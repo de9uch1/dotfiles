@@ -1,4 +1,4 @@
-use chrono::{DateTime, Local};
+use chrono::Local;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::{
@@ -21,16 +21,13 @@ struct Record {
 
 fn log_cmdline(history_file: &Path, cmdline: &str) {
     let cmdline = cmdline.trim();
-
     let curdir = env::current_dir().expect("Cannot get the current directory.");
     let username = whoami::username();
     let host = whoami::fallible::hostname().expect("Cannot get the hostname.");
-
-    let datetime: DateTime<Local> = Local::now();
-    let datetime_fmt = datetime.format("%Y-%m-%d %H:%M:%S");
+    let datetime = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
 
     let record = Record {
-        date: datetime_fmt.to_string(),
+        date: datetime.to_string(),
         host: host,
         user: username,
         dir: curdir.to_str().unwrap().to_string(),
@@ -130,15 +127,13 @@ fn main() {
         Ok(path) => Path::new(&path).to_path_buf(),
         Err(_) => dirs::home_dir().unwrap().join(Path::new(".cmdlog_history")),
     };
-    let history_file = history_file.as_path();
-
     if args.appned.len() > 0 {
-        log_cmdline(history_file, &args.appned);
+        log_cmdline(&history_file, &args.appned);
     } else if args.lookup {
-        lookup_unique_history(history_file);
+        lookup_unique_history(&history_file);
     } else if args.unique_print {
-        print_unique_history(history_file);
+        print_unique_history(&history_file);
     } else if args.print {
-        print_history(history_file);
+        print_history(&history_file);
     }
 }

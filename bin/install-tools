@@ -52,6 +52,12 @@ if command -v uv > /dev/null; then
     if ! command -v basedpyright > /dev/null; then
         uv tool install basedpyright
     fi
+    if ! command -v pyrefly > /dev/null; then
+        uv tool install pyrefly
+    fi
+    if ! command -v ty > /dev/null; then
+        uv tool install ty
+    fi
     if ! command -v ruff > /dev/null; then
         uv tool install ruff
     fi

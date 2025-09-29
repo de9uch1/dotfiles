@@ -6,6 +6,7 @@ TOOLS="
     trans
     emacs_lsp_booster
     lsp_proxy
+    clangd
 "
 
 PREFIX_ROOT=$(realpath ${PREFIX_ROOT:-$HOME/.local})
@@ -189,6 +190,30 @@ function _lsp_proxy() {
     cd $pkg_dir
     curl -sL "$src_uri" | tar -xz
     ln -sf $pkg_bin $BIN_DIR/$pkg_name
+}
+
+function _clangd() {
+    local pkg_name="clangd"
+    local repository="https://github.com/clangd/$pkg_name"
+    local version=$(curl -sL "$repository/releases/latest" \
+                        | grep -Eo "tag/[0-9\.]+" \
+                        | uniq \
+                        | cut -c 5-)
+    local src_uri="$repository/releases/download/${version}/${pkg_name}-linux-${version}.zip"
+    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_bin=$pkg_dir/$pkg_name
+
+    if exists $pkg_bin; then
+        return
+    fi
+
+    rm -rf $SRC_DIR/${pkg_name}*
+    mkdir -p $pkg_dir
+    cd $pkg_dir
+    wget -q "$src_uri"
+    unzip -q ${pkg_name}-linux-${version}.zip
+    ln -sf $pkg_bin $BIN_DIR/$pkg_name
+    rm -f ${pkg_name}-linux-${version}.zip
 }
 
 ### run this script

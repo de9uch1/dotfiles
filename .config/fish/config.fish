@@ -3,6 +3,10 @@
 
 set FISH_CONFIG_DIR $HOME/.config/fish
 
+## Key bindings
+bind alt-backspace backward-kill-word
+bind ctrl-c        cancel-commandline
+
 ## Theme: Dracula
 if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     mkdir -p $FISH_CONFIG_DIR/conf.d

@@ -16,9 +16,10 @@ export CPU_TYPE=$(uname -m)
 
 # Prefix
 ## Gentoo system
-if [[ $PREFIX_SYSTEM = gentoo ]] && \
-       [[ -d "${EPREFIX:-$HOME/gentoo}" ]] && \
-       [[ $CPU_TYPE = x86_64 ]]; then
+if [[ $PREFIX_SYSTEM = gentoo ]] \
+       && [[ -d "${EPREFIX:-$HOME/gentoo}" ]] \
+       && ( [[ $CPU_TYPE = x86_64 ]] || [[ $CPU_TYPE = aarch64 ]] ) \
+   ; then
     export EPREFIX="${EPREFIX:-$HOME/gentoo}"
 fi
 if [[ -n $EPREFIX ]] && \

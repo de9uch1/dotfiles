@@ -6,6 +6,8 @@ CANDIDATES	:= $(wildcard .??* $(XDG_CONFIG)/* bin/* $(XDG_CONFIG)/systemd/user/*
 EXCLUDE := .git .gitignore $(XDG_CONFIG) $(XDG_CONFIG)/systemd $(XDG_CONFIG)/pueue
 DOTFILES := $(filter-out $(EXCLUDE), $(CANDIDATES))
 
+CPU_TYPE := $(shell uname -m)
+
 ifdef WSLENV
 	WINHOME := $(shell wslpath `/mnt/c/WINDOWS/system32/cmd.exe /c echo %USERPROFILE% 2>/dev/null`)
 endif
@@ -20,8 +22,8 @@ list:
 
 build:
 ifdef IS_LINUX
-	@cd src/mid && cargo build --release --target=x86_64-unknown-linux-musl
-	@cd src/cmdlogger && cargo build --release --target=x86_64-unknown-linux-musl
+	@cd src/mid && cargo build --release --target=$(CPU_TYPE)-unknown-linux-musl
+	@cd src/cmdlogger && cargo build --release --target=$(CPU_TYPE)-unknown-linux-musl
 else
 	@cd src/mid && cargo build --release
 	@cd src/cmdlogger && cargo build --release
@@ -40,8 +42,8 @@ link:
 	@rm -rf $(HOME)/$(XDG_CONFIG)/wezterm
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)
 ifdef IS_LINUX
-	@ln -sfnv $(abspath src/mid/target/x86_64-unknown-linux-musl/release/mid) $(HOME)/bin/mid
-	@ln -sfnv $(abspath src/cmdlogger/target/x86_64-unknown-linux-musl/release/cmdlogger) $(HOME)/bin/cmdlogger
+	@ln -sfnv $(abspath src/mid/target/$(CPU_TYPE)-unknown-linux-musl/release/mid) $(HOME)/bin/mid
+	@ln -sfnv $(abspath src/cmdlogger/target/$(CPU_TYPE)-unknown-linux-musl/release/cmdlogger) $(HOME)/bin/cmdlogger
 else
 	@ln -sfnv $(abspath src/mid/target/release/mid) $(HOME)/bin/mid
 	@ln -sfnv $(abspath src/mid/target/release/cmdlogger) $(HOME)/bin/cmdlogger

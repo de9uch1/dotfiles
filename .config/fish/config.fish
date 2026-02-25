@@ -13,6 +13,7 @@ if not [ -f $FISH_CONFIG_DIR/conf.d/dracula.fish ]
     curl -o $FISH_CONFIG_DIR/conf.d/dracula.fish \
         "https://raw.githubusercontent.com/dracula/fish/master/conf.d/dracula.fish"
 end
+source $FISH_CONFIG_DIR/conf.d/dracula.fish
 
 ## Disable Greeting
 set fish_greeting

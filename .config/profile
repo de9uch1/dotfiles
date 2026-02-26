@@ -52,6 +52,7 @@ function start-ssh-agent() {
         source $HOME/.ssh-agent >/dev/null
     fi
     ssh-add "$HOME/.ssh/conf.d/vcs/id_rsa" >/dev/null 2>&1
+    ssh-add "$HOME/.ssh/id_ed25519" >/dev/null 2>&1
 }
 if [[ -z $SSH_SERVER ]] && ! ssh-add -l >& /dev/null; then
     start-ssh-agent

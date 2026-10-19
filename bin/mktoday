@@ -1,0 +1,5 @@
+#!/bin/bash
+
+D="$HOME/tmp/junk/$(today)_$1"
+echo "$D"
+mkdir -p "$D"

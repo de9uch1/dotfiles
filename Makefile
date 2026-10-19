@@ -46,7 +46,7 @@ ifdef IS_LINUX
 	@ln -sfnv $(abspath src/cmdlogger/target/$(CPU_TYPE)-unknown-linux-musl/release/cmdlogger) $(HOME)/bin/cmdlogger
 else
 	@ln -sfnv $(abspath src/mid/target/release/mid) $(HOME)/bin/mid
-	@ln -sfnv $(abspath src/mid/target/release/cmdlogger) $(HOME)/bin/cmdlogger
+	@ln -sfnv $(abspath src/cmdlogger/target/release/cmdlogger) $(HOME)/bin/cmdlogger
 endif
 ifdef WSLENV
 	cp -L $(HOME)/$(XDG_CONFIG)/wezterm/wezterm.lua $(WINHOME)/.wezterm.lua

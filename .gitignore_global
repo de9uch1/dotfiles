@@ -1,3 +1,6 @@
+# OS
+.DS_Store
+
 # Python
 poetry.lock
 poetry.toml

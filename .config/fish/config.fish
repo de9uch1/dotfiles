@@ -255,7 +255,7 @@ function us
     set -l prevdir ""
     while [ "$curdir" != "$prevdir" ]; and [ "$curdir" != "/" ]
         if [ -d "$curdir/.venv" ]
-            fish -il --init-command="source '$curdir/.venv/bin/activate.fish'"
+            fish -i --init-command="source '$curdir/.venv/bin/activate.fish'"
             break
         end
         set prevdir "$curdir"

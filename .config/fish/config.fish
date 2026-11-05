@@ -135,39 +135,6 @@ if [ "{$DISTRIB_ID}x" = "gentoox" ]
     end
 end
 
-## Python
-### pyenv
-# if command -v pyenv >/dev/null
-#     set -gx PYENV_SHELL fish
-#     source "$PYENV_ROOT/libexec/../completions/pyenv.fish"
-#     command pyenv rehash 2>/dev/null
-#     function pyenv
-#         set command $argv[1]
-#         set -e argv[1]
-#         switch "$command"
-#             case rehash shell
-#                   source (pyenv "sh-$command" $argv|psub)
-#             case '*'
-#                 command pyenv "$command" $argv
-#         end
-#     end
-
-#     # pyenv-virtualenv
-#     if status --is-interactive
-#         add_path "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
-#         set -gx PYENV_VIRTUALENV_INIT 1
-#         function _pyenv_virtualenv_hook --on-event fish_prompt
-#             set -l ret $status
-#             if [ -n "$VIRTUAL_ENV" ]
-#                 pyenv activate --quiet 2>/dev/null; or pyenv deactivate --quiet 2>/dev/null; or true
-#             else
-#                 pyenv activate --quiet 2>/dev/null; or true
-#             end
-#             return $ret
-#         end
-#     end
-# end
-
 ## Aliases / Abbreviations
 ### UNIX commands
 alias df       "df -Th"
@@ -209,15 +176,6 @@ function sproxy
 end
 
 ### My research tools
-#### mlexp
-alias ml    "mlexp"
-alias grun  "mlexp gpu poll"
-alias mlr   "mlexp run"
-alias mlrm  "mlexp rm"
-alias mls   "mlexp list -v"
-alias mll   "mlexp log"
-alias mlsh  "mlexp show"
-abbr -ag mr "mlexp run -- mrun"
 #### nlpack
 alias analyzer        "nlpack analyzer"
 alias corpus-stats    "analyzer corpus-stats"
@@ -236,19 +194,12 @@ abbr -ag gpl   "git pull"
 abbr -ag gps   "git push"
 abbr -ag gf    "git fetch"
 abbr -ag gfr   "git fetch && git reset --hard origin/(git branch --show-current)"
-### poetry
-# abbr -ag po    "poetry"
-# abbr -ag poi   "poetry install"
-# abbr -ag pou   "poetry update"
-# abbr -ag pos   "poetry shell"
-# abbr -ag por   "poetry run"
-# abbr -ag popip "poetry run pip"
 ### uv
-alias up "uv pip"
+alias up  "uv pip"
 alias upi "uv pip install"
 alias upu "uv pip uninstall"
-alias ui "uv sync"
-alias ue "uv venv"
+alias ui  "uv sync"
+alias ue  "uv venv"
 alias upy "uv python"
 function us
     set -l curdir (pwd)
@@ -284,6 +235,10 @@ end
 if type -q enhancd
     bind --erase \ef
     # set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
+end
+### zoxide : cd : cargo install zoxide
+if command -v zoxide >/dev/null
+    zoxide init fish | source
 end
 ### lsd : ls : cargo install lsd
 if command -v lsd >/dev/null

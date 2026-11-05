@@ -88,27 +88,6 @@ if command -v starship >/dev/null; then
     eval "$(starship init bash)"
 fi
 
-# Python
-# if command -v pyenv >/dev/null; then
-#     export PYENV_SHELL=bash
-#     source "$PYENV_ROOT/libexec/../completions/pyenv.bash"
-#     command pyenv rehash 2>/dev/null
-#     function pyenv() {
-#         local command
-#         command="${1:-}"
-#         if [[ "$#" -gt 0 ]]; then
-#             shift
-#         fi
-
-#         case "$command" in
-#             rehash|shell)
-#                 eval "$(pyenv "sh-$command" "$@")";;
-#             *)
-#                 command pyenv "$command" "$@";;
-#         esac
-#     }
-# fi
-
 # for FreeBSD
 if [[ $KERNEL_TYPE = FreeBSD ]]; then
     [[ $PS1 && -f /usr/local/share/bash-completion/bash_completion ]] && \

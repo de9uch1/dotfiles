@@ -14,6 +14,9 @@ endif
 ifeq ($(shell uname),Linux)
 	IS_LINUX := 1
 endif
+ifeq ($(shell uname),Darwin)
+	IS_DARWIN := 1
+endif
 
 all:
 
@@ -50,6 +53,9 @@ else
 endif
 ifdef WSLENV
 	cp -L $(HOME)/$(XDG_CONFIG)/wezterm/wezterm.lua $(WINHOME)/.wezterm.lua
+endif
+ifdef IS_DARWIN
+	@ln -sfnv "$(HOME)/$(XDG_CONFIG)/ptpython/config.py" "$(HOME)/Library/Application Support/ptpython/config.py"
 endif
 
 pyenv:

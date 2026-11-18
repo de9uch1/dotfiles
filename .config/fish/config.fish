@@ -137,7 +137,12 @@ end
 
 ## Aliases / Abbreviations
 ### UNIX commands
-alias df       "df -Th"
+switch "$KERNEL_TYPE"
+    case Darwin
+        alias df "df -Yh"
+    case '*'
+        alias df "df -Th"
+end
 alias free     "free -h"
 abbr -ag se    "ssh -O exit"
 alias m        "make"

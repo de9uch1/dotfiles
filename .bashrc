@@ -22,7 +22,7 @@ if [[ $PREFIX_SYSTEM = gentoo ]] \
    ; then
     export EPREFIX="${EPREFIX:-$HOME/gentoo}"
 fi
-if [[ -n $EPREFIX ]] && \
+if [[ -d "$EPREFIX" ]] && \
        [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
        [[ -f $HOME/bin/startprefix ]]; then
     exec $HOME/bin/startprefix

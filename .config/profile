@@ -22,7 +22,7 @@ function append_path() {
 
 ## Enviroment variables
 export LANG=en_US.UTF-8
-export LC_ALL="$LANG"
+# export LC_ALL="$LANG"
 export DOTFILES_PATH="$HOME/.dotfiles"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"

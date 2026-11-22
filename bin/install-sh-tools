@@ -2,10 +2,7 @@
 
 TOOLS="
     gotop
-    pandoc
-    trans
     emacs_lsp_booster
-    lsp_proxy
     clangd
 "
 
@@ -61,16 +58,25 @@ function cpu_type() {
                 echo "x86_64"
             fi
             ;;
+        arm64 | aarch64)
+            if is $alt; then
+                echo "arm64"
+            else
+                echo "aarch64"
+            fi
+            ;;
         *)
+            printf 'Unsupported CPU architecture: %s\n' "$_CPU_TYPE" >&2
+            return 1
             ;;
     esac
 }
 
 function main() {
     OS_TYPE=$(os_type)
-    CPU_TYPE=$(cpu_type)
+    CPU_TYPE=$(cpu_type) || return 1
     for tool in $TOOLS; do
-        cd $SRC_DIR
+        cd -- "$SRC_DIR" || return 1
         if _$tool; then
             echo "'$tool' successfully installed."
         else
@@ -89,63 +95,22 @@ function _gotop() {
                         uniq | \
                         cut -c 5-)
     local src_uri="$repository/releases/download/${version}/${pkg_name}_${version}_${OS_TYPE}_${_CPU_TYPE}.tgz"
-    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_dir="$SRC_DIR/$pkg_name-$version"
     local pkg_bin=$pkg_dir/$pkg_name
 
-    if exists $pkg_bin; then
+    if exists "$pkg_bin"; then
         return
     fi
 
-    rm -rf $SRC_DIR/${pkg_name}*
-    mkdir -p $pkg_dir
-    cd $pkg_dir
+    rm -rf "$SRC_DIR/$pkg_name"*
+    mkdir -p "$pkg_dir"
+    cd -- "$pkg_dir" || return 1
     curl -sL "$src_uri" | tar xz
-    ln -sf $pkg_bin $BIN_DIR/$pkg_name
-}
-
-function _pandoc() {
-    local _CPU_TYPE=$(cpu_type -a)
-    local pkg_name="pandoc"
-    local repository="https://github.com/jgm/pandoc"
-    local version=$(curl -sL "$repository/releases/latest" | \
-                        grep -Eo "tag/[0-9\.]+" | \
-                        uniq | \
-                        cut -c 5-)
-    local src_uri="$repository/releases/download/${version}/pandoc-${version}-${OS_TYPE}-${_CPU_TYPE}.tar.gz"
-    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
-    local pkg_bin=$pkg_dir/bin/$pkg_name
-
-    if [[ $OS_TYPE != "linux" ]]; then
-        echo "'${pkg_name}' only supports linux."
-    fi
-    if exists $pkg_bin; then
-        return
-    fi
-
-    rm -rf $SRC_DIR/${pkg_name}*
-    curl -sL "$src_uri" | tar xz
-    cd $pkg_dir
-    ln -sf $pkg_bin $BIN_DIR/$pkg_name
-}
-
-function _trans() {
-    local pkg_name="translate-shell"
-    local repository="https://github.com/soimort/$pkg_name"
-    local src_uri="git.io/trans"
-    local pkg_dir=$(realpath "${SRC_DIR}")
-    local pkg_bin=$pkg_dir/trans
-
-    if exists $pkg_bin || [[ $OS_TYPE != "linux" ]]; then
-        return
-    fi
-
-    curl -sLO "$src_uri"
-    chmod +x $pkg_bin
-    ln -sf $pkg_bin $BIN_DIR/trans
+    ln -sf "$pkg_bin" "$BIN_DIR/$pkg_name"
 }
 
 function _emacs_lsp_booster() {
-    local _CPU_TYPE=$(cpu_type)
+    local _CPU_TYPE=$(cpu_type) || return 1
     local pkg_name="emacs-lsp-booster"
     local repository="https://github.com/blahgeek/$pkg_name"
     local version=$(curl -sL "$repository/releases/latest" | \
@@ -153,43 +118,20 @@ function _emacs_lsp_booster() {
                         uniq | \
                         cut -c 5-)
     local src_uri="$repository/releases/download/${version}/${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip"
-    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_dir="$SRC_DIR/$pkg_name-$version"
     local pkg_bin=$pkg_dir/$pkg_name
 
-    if exists $pkg_bin; then
+    if exists "$pkg_bin"; then
         return
     fi
 
-    rm -rf $SRC_DIR/${pkg_name}*
-    mkdir -p $pkg_dir
-    cd $pkg_dir
+    rm -rf "$SRC_DIR/$pkg_name"*
+    mkdir -p "$pkg_dir"
+    cd -- "$pkg_dir" || return 1
     wget -q "$src_uri"
     unzip -q ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
-    ln -sf $pkg_bin $BIN_DIR/$pkg_name
+    ln -sf "$pkg_bin" "$BIN_DIR/$pkg_name"
     rm -f ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
-}
-
-function _lsp_proxy() {
-    local _CPU_TYPE=$(cpu_type)
-    local pkg_name="lsp-proxy"
-    local repository="https://github.com/jadestrong/$pkg_name"
-    local version=$(curl -sL "$repository/releases/latest" | \
-                        grep -Eo "tag/v[0-9\.]+" | \
-                        uniq | \
-                        cut -c 5-)
-    local src_uri="$repository/releases/download/${version}/${pkg_name}-${OS_TYPE}.tar.gz"
-    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
-    local pkg_bin=$pkg_dir/$pkg_name
-
-    if exists $pkg_bin; then
-        return
-    fi
-
-    rm -rf $SRC_DIR/${pkg_name}*
-    mkdir -p $pkg_dir
-    cd $pkg_dir
-    curl -sL "$src_uri" | tar -xz
-    ln -sf $pkg_bin $BIN_DIR/$pkg_name
 }
 
 function _clangd() {
@@ -200,19 +142,19 @@ function _clangd() {
                         | uniq \
                         | cut -c 5-)
     local src_uri="$repository/releases/download/${version}/${pkg_name}-linux-${version}.zip"
-    local pkg_dir=$(realpath "${SRC_DIR}/${pkg_name}-${version}")
+    local pkg_dir="$SRC_DIR/$pkg_name-$version"
     local pkg_bin=$pkg_dir/$pkg_name
 
-    if exists $pkg_bin; then
+    if exists "$pkg_bin"; then
         return
     fi
 
-    rm -rf $SRC_DIR/${pkg_name}*
-    mkdir -p $pkg_dir
-    cd $pkg_dir
+    rm -rf "$SRC_DIR/$pkg_name"*
+    mkdir -p "$pkg_dir"
+    cd -- "$pkg_dir" || return 1
     wget -q "$src_uri"
     unzip -q ${pkg_name}-linux-${version}.zip
-    ln -sf $pkg_bin $BIN_DIR/$pkg_name
+    ln -sf "$pkg_bin" "$BIN_DIR/$pkg_name"
     rm -f ${pkg_name}-linux-${version}.zip
 }
 

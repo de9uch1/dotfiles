@@ -1,0 +1,34 @@
+[tools]
+"aqua:ajeetdsouza/zoxide" = "latest"
+"aqua:bootandy/dust" = { version = "latest", libc = "musl" }
+"aqua:BurntSushi/ripgrep" = { version = "latest", libc = "musl" }
+"aqua:chmln/sd" = { version = "latest", libc = "musl" }
+"aqua:jgm/pandoc" = "latest"
+"aqua:jqlang/jq" = "latest"
+"aqua:junegunn/fzf" = "latest"
+"aqua:koalaman/shellcheck" = "latest"
+"aqua:lsd-rs/lsd" = { version = "latest", libc = "musl" }
+"aqua:mvdan/sh" = "latest"
+"aqua:openai/codex" = "latest"
+"aqua:sharkdp/bat" = { version = "latest", libc = "musl" }
+"aqua:sharkdp/fd" = { version = "latest", libc = "musl" }
+"aqua:sharkdp/hyperfine" = { version = "latest", libc = "musl" }
+"aqua:skim-rs/skim" = { version = "latest", libc = "musl" }
+"aqua:starship/starship" = { version = "latest", libc = "musl" }
+"aqua:x-motemen/ghq" = "latest"
+"github:dalance/procs" = "latest"
+"github:fornwall/rust-script" = { version = "latest", libc = "musl" }
+"github:imsnif/bandwhich" = { version = "latest", libc = "musl" }
+"github:jadestrong/lsp-proxy" = "latest"
+"github:wfxr/csview" = { version = "latest", libc = "musl" }
+node = "lts"
+"npm:bash-language-server" = "latest"
+pueue = { version = "latest", matching = "pueue-" }
+pueued = { version = "latest", matching = "pueued-" }
+
+[tool_alias]
+pueue = "github:Nukesor/pueue"
+pueued = "github:Nukesor/pueue"
+
+[settings.node]
+compile = false

@@ -7,7 +7,7 @@ Description=Pueue Daemon - CLI process scheduler and manager
 
 [Service]
 Restart=no
-ExecStart=/bin/bash -c 'exec $HOME/.cargo/bin/pueued'
+ExecStart=%h/.local/bin/mise exec pueued -- pueued
 #ConditionHost=
 
 [Install]

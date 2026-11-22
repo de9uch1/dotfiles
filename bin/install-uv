@@ -2,4 +2,5 @@
 
 export UV_NO_MODIFY_PATH=1
 curl -LsSf https://astral.sh/uv/install.sh | bash
+mkdir -p "$HOME/.config/fish/completions"
 ~/.local/bin/uv generate-shell-completion fish > ~/.config/fish/completions/uv.fish

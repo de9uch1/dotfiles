@@ -21,11 +21,6 @@ set fish_greeting
 ## Resets abbreviations list
 set -g fish_user_abbreviations
 
-## Prompt: Starship
-if command -v starship >/dev/null
-    starship init fish | source
-end
-
 ## History
 set -x CMDLOG_HISTORY_FILE $HOME/.cmdlog_history
 set -x DISABLE_CMDLOG_HISTORY
@@ -61,14 +56,28 @@ if [ -z "$LOADED_PROFILE" ]; and type -q bass
     reload_profile
 end
 
-## Basic Functions
 function add_path
     set -l maybe_path $argv[1]
-    if not contains $maybe_path $PATH
-        set -gx PATH $maybe_path $PATH
+    if not contains -- "$maybe_path" $PATH
+        set -gx PATH "$maybe_path" $PATH
     end
 end
 
+## mise
+if test -n "$MISE_DATA_DIR"
+    add_path "$MISE_DATA_DIR/shims"
+else if test -n "$XDG_DATA_HOME"
+    add_path "$XDG_DATA_HOME/mise/shims"
+else
+    add_path "$HOME/.local/share/mise/shims"
+end
+
+## Prompt: Starship
+if command -v starship >/dev/null
+    starship init fish | source
+end
+
+## Basic Functions
 function err
     echo "$argv"
     return 1
@@ -241,11 +250,11 @@ if type -q enhancd
     bind --erase \ef
     # set -g ENHANCD_HOOK_AFTER_CD "pwd; ls"
 end
-### zoxide : cd : cargo install zoxide
+### zoxide : cd
 if command -v zoxide >/dev/null
     zoxide init fish | source
 end
-### lsd : ls : cargo install lsd
+### lsd : ls
 if command -v lsd >/dev/null
     alias ls   "lsd"
     alias l    "ls"
@@ -253,7 +262,7 @@ if command -v lsd >/dev/null
     alias la   "ls -a"
     alias lla  "ls -la"
 end
-### bat : cat : cargo install bat
+### bat : cat
 if command -v bat >/dev/null
     alias cat  "bat"
     abbr -ag c "cat"
@@ -269,22 +278,17 @@ if command -v trash >/dev/null; and [ $TRASH_DISABLED = 0 ]
 else
     alias rm "rm -iv"
 end
-### du-dust : du : cargo install du-dust
+### dust : du
 if command -v dust >/dev/null
     alias du     "dust --terminal-width 80"
     abbr -ag du1 "du -d 1"
     abbr -ag du2 "du -d 2"
 end
-### csview : : cargo install csview
+### csview
 if command -v csview >/dev/null
     alias tsview "command csview -t -s Rounded"
     alias csview "command csview -s Rounded"
 end
-## direnv
-if command -v direnv >/dev/null
-    direnv hook fish | source
-end
-
 ## Emacs
 ### vterm
 function vterm_printf

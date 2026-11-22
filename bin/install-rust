@@ -1,0 +1,10 @@
+#!/bin/sh
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+
+rustup_bin="${CARGO_HOME:-$HOME/.cargo}/bin/rustup"
+if [ "$(uname)" = "Linux" ]; then
+    "$rustup_bin" target add "$(uname -m)-unknown-linux-musl"
+fi
+
+"$rustup_bin" component add rustfmt clippy rust-analyzer rust-src

@@ -23,6 +23,10 @@ all:
 list:
 	@$(foreach f,$(DOTFILES),/bin/ls -d $(f);)
 
+init:
+	./bin/install-rust
+	./bin/install-uv
+
 build:
 ifdef IS_LINUX
 	@cd src/mid && cargo build --release --target=$(CPU_TYPE)-unknown-linux-musl
@@ -57,9 +61,6 @@ endif
 ifdef IS_DARWIN
 	@ln -sfnv "$(HOME)/$(XDG_CONFIG)/ptpython/config.py" "$(HOME)/Library/Application Support/ptpython/config.py"
 endif
-
-pyenv:
-	@$(HOME)/bin/install-pyenv
 
 tools:
 	@$(HOME)/bin/install-tools

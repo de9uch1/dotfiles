@@ -14,7 +14,7 @@ config.font = wezterm.font_with_fallback {
    {family = "Cica", assume_emoji_presentation = true},
    "Noto Color Emoji",
 }
-config.font_size = 13
+config.font_size = 16
 config.freetype_load_target = "Light"
 config.freetype_load_flags = "NO_HINTING"
 

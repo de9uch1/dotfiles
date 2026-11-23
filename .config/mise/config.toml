@@ -25,6 +25,7 @@ node = "lts"
 "npm:bash-language-server" = "latest"
 pueue = { version = "latest", matching = "pueue-" }
 pueued = { version = "latest", matching = "pueued-" }
+github-cli = "latest"
 
 [tool_alias]
 pueue = "github:Nukesor/pueue"
@@ -32,3 +33,32 @@ pueued = "github:Nukesor/pueue"
 
 [settings.node]
 compile = false
+
+[dotfiles]
+"~/.bash_profile" = {}
+"~/.bashrc" = {}
+"~/.clisprc.lisp" = {}
+"~/.gitconfig" = {}
+"~/.gitignore_global" = {}
+"~/.hgignore" = {}
+"~/.hgrc" = {}
+"~/.sbclrc" = {}
+"~/.screenrc" = {}
+"~/.tmux.conf" = {}
+"~/.vim" = {}
+"~/.config/alacritty.yml" = {}
+"~/.config/fish" = {}
+"~/.config/profile" = {}
+"~/.config/ptpython" = {}
+"~/Library/Application Support/ptpython/config.py" = { source = "~/.dotfiles/.config/ptpython/config.py", variants = [{ os = "macos" }] }
+"~/.config/pueue/pueue.yml.sample" = {}
+"~/.config/starship.toml" = {}
+"~/.config/systemd/user/pueued.service" = {}
+"~/.config/terminfo-alacritty.info" = {}
+"~/.config/terminfo-xterm-24bits.info" = {}
+"~/.config/wezterm" = {}
+"~/bin" = { mode = "symlink-each", manifest = "git" }
+
+[bootstrap.hooks]
+post-repos = 'git -C "$HOME/.dotfiles" submodule update --init'
+post-dotfiles = '"$HOME/.dotfiles/.config/mise/hooks/copy-wezterm-wsl"'

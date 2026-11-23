@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+[ -n "${WSL_DISTRO_NAME:-}" ] || exit 0
+
+winhome=$(cmd.exe /d /c 'echo %USERPROFILE%')
+winhome=$(wslpath "$(printf '%s' "$winhome" | tr -d '\r')")
+cp -L "$HOME/.config/wezterm/wezterm.lua" "$winhome/.wezterm.lua"

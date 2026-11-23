@@ -1,0 +1,5 @@
+#!/bin/sh
+#MISE description="Install development tools"
+
+$HOME/.dotfiles/bin/install-rust
+$HOME/.dotfiles/bin/install-uv

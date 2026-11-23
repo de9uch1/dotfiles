@@ -5,6 +5,7 @@ CARGO_PKGS="
     cargo-edit
     git-delta
     choose
+    leaf-markdown-viewer
 "
 
 if ! [ -d "$CARGO_HOME" ]; then

@@ -111,10 +111,7 @@ function dots
     end
     switch $argv[1]
         case u up update upgrade pull
-            pushd ~/.dotfiles
-            git pull
-            make link
-            popd
+            git -C "$HOME/.dotfiles" pull; and mise -C "$HOME" dotfiles apply
         case *
             err "$usage"
     end

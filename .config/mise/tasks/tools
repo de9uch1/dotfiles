@@ -1,0 +1,5 @@
+#!/bin/sh
+#MISE description="Install and update optional tools"
+#MISE raw=true
+
+$HOME/.dotfiles/bin/install-tools

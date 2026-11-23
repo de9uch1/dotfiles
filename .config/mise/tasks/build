@@ -1,0 +1,22 @@
+#!/bin/sh
+#MISE description="Build and link my tools"
+
+set -eu
+cd "$HOME/.dotfiles"
+
+set --
+release=release
+if [ "$(uname -s)" = Linux ]; then
+    target="$(uname -m)-unknown-linux-musl"
+    set -- --target "$target"
+    release="$target/release"
+fi
+
+for tool in mid cmdlogger; do
+    (cd "src/$tool" && cargo build --release --target-dir target "$@")
+done
+
+mkdir -p "$HOME/bin"
+for tool in mid cmdlogger; do
+    ln -sfn "$PWD/src/$tool/target/$release/$tool" "$HOME/bin/$tool"
+done

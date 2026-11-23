@@ -9,7 +9,7 @@ curl -fsSL https://raw.githubusercontent.com/de9uch1/dotfiles/refs/heads/main/bo
 - Install tools
 
 ```sh
-mise run --skip-tools init
-mise run --skip-tools build
-mise run --skip-tools tools
+mise run init-rust ::: init-uv
+mise run build
+mise run tools
 ```

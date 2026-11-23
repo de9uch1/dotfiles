@@ -2,7 +2,6 @@
 
 TOOLS="
     gotop
-    emacs_lsp_booster
     clangd
 "
 
@@ -107,31 +106,6 @@ function _gotop() {
     cd -- "$pkg_dir" || return 1
     curl -sL "$src_uri" | tar xz
     ln -sf "$pkg_bin" "$BIN_DIR/$pkg_name"
-}
-
-function _emacs_lsp_booster() {
-    local _CPU_TYPE=$(cpu_type) || return 1
-    local pkg_name="emacs-lsp-booster"
-    local repository="https://github.com/blahgeek/$pkg_name"
-    local version=$(curl -sL "$repository/releases/latest" | \
-                        grep -Eo "tag/v[0-9\.]+" | \
-                        uniq | \
-                        cut -c 5-)
-    local src_uri="$repository/releases/download/${version}/${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip"
-    local pkg_dir="$SRC_DIR/$pkg_name-$version"
-    local pkg_bin=$pkg_dir/$pkg_name
-
-    if exists "$pkg_bin"; then
-        return
-    fi
-
-    rm -rf "$SRC_DIR/$pkg_name"*
-    mkdir -p "$pkg_dir"
-    cd -- "$pkg_dir" || return 1
-    wget -q "$src_uri"
-    unzip -q ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
-    ln -sf "$pkg_bin" "$BIN_DIR/$pkg_name"
-    rm -f ${pkg_name}_${version}_${_CPU_TYPE}-unknown-${OS_TYPE}-musl.zip
 }
 
 function _clangd() {

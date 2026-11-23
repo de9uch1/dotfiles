@@ -1,5 +1,46 @@
 #!/bin/sh
-#MISE description="Install and update optional tools"
-#MISE raw=true
 
-$HOME/.dotfiles/bin/install-tools
+CARGO_PKGS="
+    cargo-update
+    cargo-edit
+    git-delta
+    choose
+    leaf-markdown-viewer
+    emacs-lsp-booster
+"
+
+if command -v rustup; then
+    rustup self update
+    rustup update
+fi
+
+if command -v cargo; then
+    cargo install $CARGO_PKGS
+    cargo install-update -a
+fi
+
+if command -v uv > /dev/null; then
+    if ! command -v trash > /dev/null; then
+        uv tool install trash-cli
+    fi
+    if ! command -v pyrefly > /dev/null; then
+        uv tool install pyrefly
+    fi
+    if ! command -v ty > /dev/null; then
+        uv tool install ty
+    fi
+    if ! command -v ruff > /dev/null; then
+        uv tool install ruff
+    fi
+    if ! command -v pip > /dev/null; then
+        uv tool install pip
+    fi
+    uv tool upgrade --all
+fi
+
+mkdir -p $HOME/.local/bin/
+curl \
+    -sL \
+    -o $HOME/.local/bin/git-rsync \
+    https://raw.githubusercontent.com/de9uch1/git-rsync/master/git-rsync
+chmod +x $HOME/.local/bin/git-rsync

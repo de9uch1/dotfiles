@@ -44,7 +44,6 @@ link:
 	@mkdir -p $(HOME)/$(XDG_CONFIG)/pueue
 	@rm -rf $(HOME)/.vim
 	@rm -rf $(HOME)/$(XDG_CONFIG)/fish
-	@rm -rf $(HOME)/$(XDG_CONFIG)/powerline
 	@rm -rf $(HOME)/$(XDG_CONFIG)/ptpython
 	@rm -rf $(HOME)/$(XDG_CONFIG)/wezterm
 	@$(foreach f,$(DOTFILES), ln -sfnv $(abspath $(f)) $(HOME)/$(f);)

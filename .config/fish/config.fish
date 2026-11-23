@@ -121,24 +121,6 @@ end
 if [ "{$DISTRIB_ID}x" = "gentoox" ]
     ### app-portage/portage-utils
     abbr -ag lastsync 'qlop -s | tail -n1'
-    abbr -ag qtime    'qlop -tv'
-    ### app-portage/flaggie
-    function acckw
-        switch $argv[1]
-            case a
-                sudo flaggie $argv[2] '+kw::~amd64'
-            case d
-                sudo flaggie $argv[2] '-kw::~amd64'
-            case r
-                sudo flaggie $argv[2] '%kw::~amd64'
-            case v
-                sudo flaggie $argv[2] '?kw::~amd64'
-            case ''
-                return 1
-            case '*'
-                return 1
-        end
-    end
 end
 
 ## Aliases / Abbreviations

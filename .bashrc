@@ -98,27 +98,6 @@ fi
 function gentoo-mode() {
 	# app-portage/portage-utils
 	alias lastsync='qlop -s | tail -n1'
-	alias qtime='qlop -tv'
-
-	# app-portage/flaggie
-	function acckw() {
-		case $1 in
-			a)
-				sudo flaggie $2 '+kw::~amd64'
-				;;
-			d)
-				sudo flaggie $2 '-kw::~amd64'
-				;;
-			r)
-				sudo flaggie $2 '%kw::~amd64'
-				;;
-			v)
-				sudo flaggie $2 '?kw::~amd64'
-				;;
-			*)
-				return -1
-		esac
-	}
 }
 if [[ $DISTRIB_ID = gentoo ]]; then
     gentoo-mode

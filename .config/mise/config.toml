@@ -31,6 +31,9 @@ github-cli = "latest"
 pueue = "github:Nukesor/pueue"
 pueued = "github:Nukesor/pueue"
 
+[settings]
+minimum_release_age = "3d"
+
 [settings.node]
 compile = false
 

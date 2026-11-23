@@ -3,7 +3,7 @@
 
 # Setup
 if [[ -z "${LOADED_PROFILE}" ]]; then
-    source $HOME/.config/profile
+    source "$HOME/.config/profile"
 fi
 
 # for non-interactive shell
@@ -15,27 +15,14 @@ export KERNEL_TYPE=$(uname)
 export CPU_TYPE=$(uname -m)
 
 # Prefix
-## Gentoo system
-if [[ $PREFIX_SYSTEM = gentoo ]] \
-       && [[ -d "${EPREFIX:-$HOME/gentoo}" ]] \
-       && ( [[ $CPU_TYPE = x86_64 ]] || [[ $CPU_TYPE = aarch64 ]] ) \
-   ; then
+if [[ $PREFIX_SYSTEM = gentoo ]] && [[ -d "${EPREFIX:-$HOME/gentoo}" ]]; then
+    ## Gentoo prefix
     export EPREFIX="${EPREFIX:-$HOME/gentoo}"
-fi
-if [[ -d "$EPREFIX" ]] && \
-       [[ ${SHELL#$EPREFIX} = $SHELL ]] && \
-       [[ -f $HOME/bin/startprefix ]]; then
-    exec $HOME/bin/startprefix
-    if [[ -f $EPREFIX/etc/os-release ]]; then
-        source $EPREFIX/etc/os-release
-        export DISTRIB_ID="${ID}"
+    if [[ ${SHELL#"$EPREFIX"} = "$SHELL" ]] && [[ -f $HOME/bin/startprefix ]]; then
+        exec "$HOME/bin/startprefix"
     fi
-fi
-
-## linuxbrew
-if [[ $PREFIX_SYSTEM = brew ]] && \
-       [[ -d $HOME/.linuxbrew ]] && \
-       [[ $CPU_TYPE = x86_64 ]]; then
+elif [[ $PREFIX_SYSTEM = brew ]] && [[ -d $HOME/.linuxbrew ]]; then
+    ## linuxbrew
     echo "Entering brew..."
     export HOMEBREW_PREFIX="$HOME/.linuxbrew"
     export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
@@ -50,36 +37,25 @@ if [[ $TERM = dumb ]] || [[ $TERM = eterm-color ]] || [[ $- = *c* ]]; then
     LOGIN_SHELL=bash
 fi
 
-# Setup VSOCK X11 connection for WSL
-#if [[ -n $WSL_DISTRO_NAME ]] \
-#       && ! [[ -S /tmp/.X11-unix/X0 ]] \
-#       && command -v socat > /dev/null; then
-#    mkdir -p /tmp/.X11-unix
-#    chmod -R 777 /tmp/.X11-unix
-#    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 > /dev/null < /dev/null 2>&1 &
-#    disown
-#fi
-
 # exec fish shell
 if FISH_COMMAND=$(command -v fish) && \
         [[ -x "$FISH_COMMAND" ]] && \
         [[ "$LOGIN_SHELL" = "fish" ]]; then
-    export SHLVL=$(( $SHLVL - 1 ))
+    export SHLVL=$(( SHLVL - 1 ))
     SHELL="$FISH_COMMAND" PATH="$PATH" exec fish
 fi
 
 # aliases
 if [[ $KERNEL_TYPE = Linux ]]; then
-    alias ls='ls -F --color $*'
+    alias ls='ls -F --color'
 elif [[ $KERNEL_TYPE = FreeBSD ]]; then
-    alias ls='ls -F -G $*'
+    alias ls='ls -F -G'
 fi
-alias ll='ls -lh $*'
-alias la='ls -a $*'
-alias lla='ls -lha $*'
-alias findn='find . -name $*'
-alias duc='du -had1 $*'
-alias p='ps aux | grep $* | grep -v grep'
+alias ll='ls -lh'
+alias la='ls -a'
+alias lla='ls -lha'
+alias findn='find . -name'
+alias duc='du -had1'
 alias emacs='emacsclient -a "emacs"'
 alias e='emacsclient -a "emacs"'
 
@@ -90,15 +66,7 @@ fi
 
 # for FreeBSD
 if [[ $KERNEL_TYPE = FreeBSD ]]; then
-    [[ $PS1 && -f /usr/local/share/bash-completion/bash_completion ]] && \
+    if [[ -f /usr/local/share/bash-completion/bash_completion ]]; then
         source /usr/local/share/bash-completion/bash_completion
-fi
-
-# for Gentoo system
-function gentoo-mode() {
-	# app-portage/portage-utils
-	alias lastsync='qlop -s | tail -n1'
-}
-if [[ $DISTRIB_ID = gentoo ]]; then
-    gentoo-mode
+    fi
 fi

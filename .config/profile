@@ -40,9 +40,9 @@ export PREFIX_SYSTEM=${_PREFIX_SYSTEM:-${PREFIX_SYSTEM:-gentoo}}
 ## System Configurations
 ### Basic directory
 mkdir -p \
-      $HOME/.local/bin \
-      $HOME/.local/src \
-      $HOME/.local/share
+      "$HOME/.local/bin" \
+      "$HOME/.local/src" \
+      "$HOME/.local/share"
 ### ssh-agent
 function start-ssh-agent() {
     if [[ -f $HOME/.ssh-agent ]]; then
@@ -73,15 +73,15 @@ add_path $CARGO_HOME/bin
 # fi
 ### Python
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-add_path $HOME/.local/share/uv/tools/pip/bin
+add_path "$HOME/.local/share/uv/tools/pip/bin"
 
 ## My Configurations
 ### PATH
 add_path \
-    $HOME/bin \
-    $HOME/.local/bin \
-    $HOME/local/bin
-add_path "${MISE_DATA_DIR:-$XDG_DATA_HOME/mise}/shims"
+    "$HOME/bin" \
+    "$HOME/.local/bin" \
+    "$HOME/local/bin" \
+    "${MISE_DATA_DIR:-$XDG_DATA_HOME/mise}/shims"
 
 ### WSLPATH
 #if [[ -n "$WSLPATH" ]]; then
